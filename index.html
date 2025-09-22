@@ -62,7 +62,7 @@
             <div class="text-center mb-8">
                 <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-[100px] h-[50px] object-contain mx-auto mb-4">
                 <h1 class="text-2xl font-bold text-gray-700">西北保全勤務管理系統</h1>
-                <p class="text-gray-500">請登入您的帳戶</p>
+                <p class="text-gray-500">V1.0.1</p>
             </div>
             <form id="loginForm">
                 <div class="mb-4">
@@ -107,7 +107,7 @@
     <div id="adminDashboard" class="hidden w-full h-screen">
         <div class="flex h-full">
             <!-- Sidebar (側邊欄) -->
-            <div id="sidebar" class="bg-gray-800 shadow-md flex-col hidden md:flex z-50 fixed md:static top-0 left-0 h-full overflow-y-auto no-scrollbar" style="background-color: #f3f4f6;">
+            <div id="sidebar" class="bg-gray-800 shadow-md flex-col z-50 fixed md:static top-0 left-0 h-full overflow-y-auto no-scrollbar hidden md:flex" style="background-color: #f3f4f6;">
                 <div class="p-6 text-center border-b border-gray-200">
                     <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-[80px] h-[40px] object-contain mx-auto mb-2">
                     <h2 class="text-xl font-semibold text-gray-800">西北保全</h2>
@@ -244,13 +244,11 @@
             // Dashboard navigation elements (儀表板導覽元素)
             const dashboardLink = document.getElementById('dashboardLink');
             const settingsLink = document.getElementById('settingsLink');
-            const reportsLink = document.querySelectorAll('nav a')[1]; // Fixed reference
             const dashboardView = document.getElementById('dashboardView');
             const settingsView = document.getElementById('settingsView');
             const pageTitle = document.getElementById('pageTitle');
             const sidebar = document.getElementById('sidebar');
             const menuButton = document.getElementById('menuButton');
-
 
             // Message box elements (訊息框元素)
             const messageBoxContainer = document.getElementById('messageBoxContainer');
@@ -345,7 +343,7 @@
                     updateActiveLink('settingsLink');
                 }
                 // Hide sidebar on view change for mobile devices
-                if (window.innerWidth < 400) {
+                if (window.innerWidth < 700) {
                     sidebar.classList.add('hidden');
                 }
             }
@@ -366,14 +364,14 @@
                 navLinks[i].addEventListener('click', (e) => {
                     e.preventDefault();
                     showMessage('此功能尚未啟用，請稍後再試。');
-                    updateActiveLink(navLinks[i].id);
+                    // No need to update active link since we don't have views for these pages
                 });
             }
 
             // Function to handle sidebar width (處理側邊欄寬度)
             function handleSidebarWidth() {
                 const sidebar = document.getElementById('sidebar');
-                if (window.innerWidth < 400) {
+                if (window.innerWidth < 700) {
                     sidebar.style.width = '50%';
                     sidebar.classList.add('hidden');
                     menuButton.classList.remove('hidden');
@@ -395,7 +393,7 @@
             
             // Close sidebar when clicking outside on mobile (在行動裝置上點擊側邊欄外部時關閉)
             adminDashboard.addEventListener('click', (e) => {
-                if (window.innerWidth < 400 && !sidebar.contains(e.target) && !menuButton.contains(e.target)) {
+                if (window.innerWidth < 700 && !sidebar.contains(e.target) && !menuButton.contains(e.target)) {
                     sidebar.classList.add('hidden');
                 }
             });
