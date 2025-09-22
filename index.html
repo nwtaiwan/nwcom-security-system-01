@@ -62,7 +62,7 @@
             <div class="text-center mb-8">
                 <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-[100px] h-[50px] object-contain mx-auto mb-4">
                 <h1 class="text-2xl font-bold text-gray-700">西北保全勤務管理系統</h1>
-                <p class="text-gray-500">V1.0.2</p>
+                <p class="text-gray-500">V1.0.3</p>
             </div>
             <form id="loginForm">
                 <div class="mb-4">
@@ -138,7 +138,7 @@
                         <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-2-9v2h-2v2h2v2h2v-2h2V9h-2V7h-2z"></path></svg>
                         帳號管理
                     </a>
-                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                    <a id="communityLink" href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
                         <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
                         社區管理
                     </a>
@@ -170,14 +170,6 @@
                 <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 bg-white">
                     <!-- Dashboard View (儀表板視圖) -->
                     <div id="dashboardView">
-                        <div class="text-center p-10 bg-gray-100 rounded-xl shadow">
-                            <h2 class="text-2xl font-semibold text-gray-700">歡迎回到儀表板，<span id="welcomeUser">管理員</span>！</h2>
-                            <p class="text-gray-500 mt-2">您可以從左側選單或上方的按鈕瀏覽不同的系統功能。</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Settings View (系統設定視圖) -->
-                    <div id="settingsView" class="hidden">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             <!-- 功能卡片 -->
                             <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
@@ -214,6 +206,73 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Community Management View (社區管理視圖) -->
+                    <div id="communityView" class="hidden">
+                        <div class="bg-white p-6 rounded-xl shadow">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">新增社區</h2>
+                            <form id="addCommunityForm" class="space-y-4">
+                                <div>
+                                    <label for="community-region" class="block text-sm font-medium text-gray-700">區域</label>
+                                    <select id="community-region" name="region" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                        <!-- Options will be populated by JS -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="community-id" class="block text-sm font-medium text-gray-700">社區編號</label>
+                                    <input type="text" id="community-id" name="communityId" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                </div>
+                                <div>
+                                    <label for="community-name" class="block text-sm font-medium text-gray-700">社區名稱</label>
+                                    <input type="text" id="community-name" name="communityName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                </div>
+                                <div>
+                                    <label for="community-address" class="block text-sm font-medium text-gray-700">社區地址</label>
+                                    <input type="text" id="community-address" name="communityAddress" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                </div>
+                                <div>
+                                    <label for="community-units" class="block text-sm font-medium text-gray-700">社區戶數</label>
+                                    <input type="number" id="community-units" name="communityUnits" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-800 mt-4 mb-2">社區委員資訊</h3>
+                                    <div id="committee-members" class="space-y-2">
+                                        <!-- Committee members will be added dynamically -->
+                                    </div>
+                                    <button type="button" id="add-member-button" class="mt-2 bg-red-500 text-white text-sm py-1 px-3 rounded-lg hover:bg-red-600">新增委員</button>
+                                </div>
+                                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">儲存社區</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings View (系統設定視圖) -->
+                    <div id="settingsView" class="hidden">
+                        <div class="flex border-b border-gray-200">
+                            <button id="regionsTab" class="px-4 py-2 text-gray-600 font-semibold border-b-2 border-transparent hover:border-red-500">區域設定</button>
+                            <button id="titlesTab" class="px-4 py-2 text-gray-600 font-semibold border-b-2 border-transparent hover:border-red-500">委員職稱設定</button>
+                        </div>
+                        <div id="regionsView" class="mt-4 p-4 bg-gray-100 rounded-xl shadow">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">區域設定</h2>
+                            <ul id="regionList" class="list-disc pl-5 space-y-2">
+                                <!-- Regions will be populated by JS -->
+                            </ul>
+                            <div class="mt-4 flex space-x-2">
+                                <input type="text" id="newRegionInput" placeholder="新增區域..." class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                <button id="addRegionButton" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">新增</button>
+                            </div>
+                        </div>
+                        <div id="titlesView" class="mt-4 p-4 bg-gray-100 rounded-xl shadow hidden">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">委員職稱設定</h2>
+                            <ul id="titleList" class="list-disc pl-5 space-y-2">
+                                <!-- Titles will be populated by JS -->
+                            </ul>
+                            <div class="mt-4 flex space-x-2">
+                                <input type="text" id="newTitleInput" placeholder="新增職稱..." class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                                <button id="addTitleButton" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">新增</button>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
@@ -243,17 +302,39 @@
             
             // Dashboard navigation elements (儀表板導覽元素)
             const dashboardLink = document.getElementById('dashboardLink');
+            const communityLink = document.getElementById('communityLink');
             const settingsLink = document.getElementById('settingsLink');
             const dashboardView = document.getElementById('dashboardView');
+            const communityView = document.getElementById('communityView');
             const settingsView = document.getElementById('settingsView');
             const pageTitle = document.getElementById('pageTitle');
             const sidebar = document.getElementById('sidebar');
             const menuButton = document.getElementById('menuButton');
+            const regionsTab = document.getElementById('regionsTab');
+            const titlesTab = document.getElementById('titlesTab');
+            const regionsView = document.getElementById('regionsView');
+            const titlesView = document.getElementById('titlesView');
+
+            // Community Management elements
+            const addCommunityForm = document.getElementById('addCommunityForm');
+            const communityRegionSelect = document.getElementById('community-region');
+            const committeeMembersContainer = document.getElementById('committee-members');
+            const addMemberButton = document.getElementById('add-member-button');
+            const regionList = document.getElementById('regionList');
+            const newRegionInput = document.getElementById('newRegionInput');
+            const addRegionButton = document.getElementById('addRegionButton');
+            const titleList = document.getElementById('titleList');
+            const newTitleInput = document.getElementById('newTitleInput');
+            const addTitleButton = document.getElementById('addTitleButton');
 
             // Message box elements (訊息框元素)
             const messageBoxContainer = document.getElementById('messageBoxContainer');
             const messageText = document.getElementById('messageText');
             const closeMessageBoxButton = document.getElementById('closeMessageBox');
+
+            // Hardcoded data for demo (僅供示範，真實系統應使用後端)
+            let regions = ['台北', '新北', '桃園'];
+            let committeeTitles = ['主委', '副主委', '財委', '監委'];
 
             // Hardcoded admin credentials for demo purposes (僅供示範，真實系統應使用安全後端)
             const ADMIN_EMAIL = 'admin@northwest.com';
@@ -281,6 +362,62 @@
                     activeLink.classList.remove('text-gray-600', 'hover:bg-gray-200');
                     activeLink.classList.add('bg-red-600', 'text-white');
                 }
+            }
+            
+            // Function to render community form options (渲染社區表單選項)
+            function renderCommunityFormOptions() {
+                communityRegionSelect.innerHTML = regions.map(region => `<option value="${region}">${region}</option>`).join('');
+            }
+
+            // Function to render region list (渲染區域列表)
+            function renderRegionList() {
+                regionList.innerHTML = regions.map(region => `
+                    <li class="flex justify-between items-center">${region}
+                        <button class="remove-btn text-red-500 hover:text-red-700" data-name="${region}">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+                        </button>
+                    </li>
+                `).join('');
+            }
+
+            // Function to render title list (渲染職稱列表)
+            function renderTitleList() {
+                titleList.innerHTML = committeeTitles.map(title => `
+                    <li class="flex justify-between items-center">${title}
+                        <button class="remove-btn text-red-500 hover:text-red-700" data-name="${title}">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+                        </button>
+                    </li>
+                `).join('');
+            }
+            
+            // Function to add a committee member form field (新增委員表單欄位)
+            function addCommitteeMember() {
+                const memberDiv = document.createElement('div');
+                memberDiv.classList.add('flex', 'space-x-2', 'items-end');
+                memberDiv.innerHTML = `
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700">職稱</label>
+                        <select name="memberTitle" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                            ${committeeTitles.map(title => `<option value="${title}">${title}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700">姓名</label>
+                        <input type="text" name="memberName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700">電話</label>
+                        <input type="tel" name="memberPhone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                    </div>
+                    <button type="button" class="remove-member-btn text-red-500 hover:text-red-700">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+                    </button>
+                `;
+                committeeMembersContainer.appendChild(memberDiv);
+                memberDiv.querySelector('.remove-member-btn').addEventListener('click', () => {
+                    memberDiv.remove();
+                });
             }
 
             // Add event listener to close the message box (為訊息框的關閉按鈕添加事件監聽器)
@@ -330,6 +467,7 @@
             function showView(view) {
                 // Hide all views first
                 dashboardView.classList.add('hidden');
+                communityView.classList.add('hidden');
                 settingsView.classList.add('hidden');
 
                 // Show the requested view and update the title
@@ -337,10 +475,19 @@
                     dashboardView.classList.remove('hidden');
                     pageTitle.textContent = '儀表板';
                     updateActiveLink('dashboardLink');
+                } else if (view === 'community') {
+                    communityView.classList.remove('hidden');
+                    pageTitle.textContent = '社區管理';
+                    updateActiveLink('communityLink');
+                    renderCommunityFormOptions();
                 } else if (view === 'settings') {
                     settingsView.classList.remove('hidden');
                     pageTitle.textContent = '系統設定';
                     updateActiveLink('settingsLink');
+                    renderRegionList();
+                    renderTitleList();
+                    // Set default tab view
+                    regionsTab.click();
                 }
                 // Hide sidebar on view change for mobile devices
                 if (window.innerWidth < 700) {
@@ -353,6 +500,11 @@
                 showView('dashboard');
             });
             
+            communityLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('community');
+            });
+
             settingsLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 showView('settings');
@@ -360,15 +512,15 @@
 
             // Added click handlers for other navigation links
             const navLinks = document.querySelectorAll('nav a');
-            for(let i = 1; i < navLinks.length - 1; i++) {
-                if (navLinks[i].id !== 'settingsLink') {
-                    navLinks[i].addEventListener('click', (e) => {
+            navLinks.forEach(link => {
+                if (link.id !== 'dashboardLink' && link.id !== 'communityLink' && link.id !== 'settingsLink') {
+                    link.addEventListener('click', (e) => {
                         e.preventDefault();
                         showMessage('此功能尚未啟用，請稍後再試。');
                         // No need to update active link since we don't have views for these pages
                     });
                 }
-            }
+            });
 
             // Function to handle sidebar width (處理側邊欄寬度)
             function handleSidebarWidth() {
@@ -399,7 +551,93 @@
                     sidebar.classList.add('hidden');
                 }
             });
+            
+            // Settings tab logic
+            regionsTab.addEventListener('click', () => {
+                regionsView.classList.remove('hidden');
+                titlesView.classList.add('hidden');
+                regionsTab.classList.add('border-red-500');
+                titlesTab.classList.remove('border-red-500');
+            });
 
+            titlesTab.addEventListener('click', () => {
+                titlesView.classList.remove('hidden');
+                regionsView.classList.add('hidden');
+                titlesTab.classList.add('border-red-500');
+                regionsTab.classList.remove('border-red-500');
+            });
+            
+            // Add/Remove Region logic
+            addRegionButton.addEventListener('click', () => {
+                const newRegion = newRegionInput.value.trim();
+                if (newRegion && !regions.includes(newRegion)) {
+                    regions.push(newRegion);
+                    renderRegionList();
+                    newRegionInput.value = '';
+                }
+            });
+
+            regionList.addEventListener('click', (e) => {
+                if (e.target.closest('.remove-btn')) {
+                    const nameToRemove = e.target.closest('.remove-btn').dataset.name;
+                    regions = regions.filter(region => region !== nameToRemove);
+                    renderRegionList();
+                }
+            });
+
+            // Add/Remove Title logic
+            addTitleButton.addEventListener('click', () => {
+                const newTitle = newTitleInput.value.trim();
+                if (newTitle && !committeeTitles.includes(newTitle)) {
+                    committeeTitles.push(newTitle);
+                    renderTitleList();
+                    newTitleInput.value = '';
+                }
+            });
+            
+            titleList.addEventListener('click', (e) => {
+                if (e.target.closest('.remove-btn')) {
+                    const nameToRemove = e.target.closest('.remove-btn').dataset.name;
+                    committeeTitles = committeeTitles.filter(title => title !== nameToRemove);
+                    renderTitleList();
+                }
+            });
+
+            // Add committee member form field logic
+            addMemberButton.addEventListener('click', addCommitteeMember);
+
+            // Handle community form submission
+            addCommunityForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(addCommunityForm);
+                const communityData = {};
+                for (let [key, value] of formData.entries()) {
+                    communityData[key] = value;
+                }
+                
+                // Collect committee member data
+                const members = [];
+                const memberContainers = committeeMembersContainer.querySelectorAll('.flex');
+                memberContainers.forEach(container => {
+                    const title = container.querySelector('[name="memberTitle"]').value;
+                    const name = container.querySelector('[name="memberName"]').value;
+                    const phone = container.querySelector('[name="memberPhone"]').value;
+                    if (name) {
+                        members.push({ title, name, phone });
+                    }
+                });
+                
+                communityData.committeeMembers = members;
+                
+                console.log('新社區資料:', communityData);
+                showMessage('新社區已成功儲存！');
+                addCommunityForm.reset();
+                committeeMembersContainer.innerHTML = ''; // Clear member fields
+            });
+
+            // Initial render of community form fields
+            renderCommunityFormOptions();
+            addCommitteeMember();
         });
     </script>
 </body>
