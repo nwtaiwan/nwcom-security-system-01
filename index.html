@@ -21,11 +21,31 @@
         #togglePassword {
             cursor: pointer;
         }
+        .message-box-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .message-box {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="bg-red-700 flex items-center justify-center min-h-screen p-4">
 
-    <!-- 登入頁面 -->
+    <!-- Login Page (登入頁面) -->
     <div id="loginPage" class="w-full max-w-md">
         <div class="bg-white shadow-lg rounded-xl px-8 pt-6 pb-8 mb-4">
             <div class="text-center mb-8">
@@ -36,31 +56,30 @@
             <form id="loginForm">
                 <div class="mb-4">
                     <div class="flex justify-between items-center mb-2">
-                         <label class="block text-gray-700 text-sm font-bold" for="email">
+                        <label class="block text-gray-700 text-sm font-bold" for="email">
                             帳號 (Email)
                         </label>
                         <div class="flex items-center">
-                            <input id="rememberMe" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <input id="rememberMe" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
                             <label for="rememberMe" class="ml-2 block text-sm text-gray-700">
                                 記住我
                             </label>
                         </div>
                     </div>
-                    <input class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="email" type="email" placeholder="admin@northwest.com" value="admin@northwest.com">
+                    <input class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500" id="email" type="email" placeholder="admin@northwest.com" value="admin@northwest.com">
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
                         密碼
                     </label>
                     <div class="relative">
-                        <input class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 pr-10 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" type="password" placeholder="******************" value="password123">
+                        <input class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 pr-10 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500" id="password" type="password" placeholder="******************" value="password123">
                         <div id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                             <svg id="eyeIcon" class="h-6 w-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                             <svg id="eyeOffIcon" class="h-6 w-6 text-gray-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .126 2.454 .364m-6.082 11.45a1 1 0 01-1.414-1.414l11.03-11.03a1 1 0 011.414 1.414l-11.03 11.03zM15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <svg id="eyeIcon" class="h-6 w-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <svg id="eyeOffIcon" class="h-6 w-6 text-gray-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .126 2.454 .364m-6.082 11.45a1 1 0 01-1.414-1.414l11.03-11.03a1 1 0 011.414 1.414l-11.03 11.03zM15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
                     </div>
                 </div>
-                <div id="errorMessage" class="text-red-500 text-xs italic mb-4 hidden"></div>
                 <div class="flex items-center justify-between mt-4">
                     <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg w-full focus:outline-none focus:shadow-outline" type="submit">
                         登入
@@ -73,143 +92,250 @@
         </p>
     </div>
 
-    <!-- 系統管理員全功能權限頁面 (預設隱藏) -->
+    <!-- Admin Dashboard Page (系統管理員全功能權限頁面) -->
     <div id="adminDashboard" class="hidden w-full h-screen">
-        <!-- ... existing admin dashboard code ... -->
         <div class="flex h-full bg-gray-100">
-            <!-- Sidebar -->
-            <div class="w-64 bg-white shadow-md flex flex-col">
+            <!-- Sidebar (側邊欄) -->
+            <div id="sidebar" class="w-64 bg-white shadow-md flex flex-col hidden md:flex">
                 <div class="p-6 text-center border-b">
-                    <img src="https://placehold.co/80x80/3B82F6/FFFFFF?text=NW" alt="系統Logo" class="mx-auto mb-2 rounded-full">
+                    <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-[80px] h-[40px] object-contain mx-auto mb-2">
                     <h2 class="text-xl font-semibold">管理系統</h2>
                     <p class="text-sm text-gray-500">系統管理員</p>
                 </div>
                 <nav class="flex-1 px-4 py-6 space-y-2">
-                    <a href="#" class="flex items-center px-4 py-2 text-white bg-blue-600 rounded-lg">
+                    <a id="dashboardLink" href="#" class="flex items-center px-4 py-2 text-white bg-red-600 rounded-lg">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                         儀表板
                     </a>
-                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
                         報告與分析
                     </a>
-                     <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <a id="settingsLink" href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0 3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         系統設定
                     </a>
                 </nav>
                 <div class="mt-auto p-4 border-t">
                     <button id="logoutButton" class="w-full flex items-center justify-center px-4 py-2 text-gray-600 hover:bg-red-100 hover:text-red-600 rounded-lg">
-                       <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         登出
                     </button>
                 </div>
             </div>
 
-            <!-- Main Content -->
+            <!-- Main Content (主要內容) -->
             <div class="flex-1 flex flex-col overflow-hidden">
                 <header class="bg-white shadow-sm p-4 flex justify-between items-center">
-                    <h1 class="text-2xl font-semibold text-gray-800">系統管理員儀表板</h1>
-                     <div class="flex items-center">
-                        <span class="text-gray-600">Admin</span>
+                    <button id="menuButton" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none focus:text-gray-900">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <h1 id="pageTitle" class="text-2xl font-semibold text-gray-800">系統管理員儀表板</h1>
+                    <div class="flex items-center">
+                        <span id="userName" class="text-gray-600"></span>
                         <img class="w-10 h-10 rounded-full ml-3" src="https://placehold.co/40x40/7C3AED/FFFFFF?text=A" alt="Admin Avatar">
                     </div>
                 </header>
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        <!-- 功能卡片 -->
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">帳號管理</h3>
-                            <p class="text-gray-500 mt-2 text-sm">建立、編輯、刪除各級別使用者帳號。</p>
+                    <!-- Dashboard View (儀表板視圖) -->
+                    <div id="dashboardView">
+                        <div class="text-center p-10 bg-white rounded-xl shadow">
+                            <h2 class="text-2xl font-semibold text-gray-700">歡迎回到儀表板，<span id="welcomeUser">管理員</span>！</h2>
+                            <p class="text-gray-500 mt-2">您可以從左側選單或上方的按鈕瀏覽不同的系統功能。</p>
                         </div>
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">權限分配</h3>
-                            <p class="text-gray-500 mt-2 text-sm">設定不同角色的管理範圍與功能權限。</p>
-                        </div>
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">社區與職位設定</h3>
-                            <p class="text-gray-500 mt-2 text-sm">新增與管理保全服務的社區及職位資料。</p>
-                        </div>
-                         <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">GPS 打卡設定</h3>
-                            <p class="text-gray-500 mt-2 text-sm">設定各社區的 GPS 地理圍欄打卡範圍。</p>
-                        </div>
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">考核規則設定</h3>
-                            <p class="text-gray-500 mt-2 text-sm">自訂獎懲項目、分數標準與考核週期。</p>
-                        </div>
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">數據洞察</h3>
-                            <p class="text-gray-500 mt-2 text-sm">查看全公司的營運數據與分析報表。</p>
-                        </div>
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">勤務排班總覽</h3>
-                            <p class="text-gray-500 mt-2 text-sm">查看所有社區的排班狀況與人力配置。</p>
-                        </div>
-                        <div class="dashboard-card bg-white p-6 rounded-xl shadow">
-                            <h3 class="font-semibold text-lg text-gray-700">系統公告</h3>
-                            <p class="text-gray-500 mt-2 text-sm">發布重要訊息給所有系統使用者。</p>
+                    </div>
+                    
+                    <!-- Settings View (系統設定視圖) -->
+                    <div id="settingsView" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <!-- 功能卡片 -->
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">帳號管理</h3>
+                                <p class="text-gray-500 mt-2 text-sm">建立、編輯、刪除各級別使用者帳號。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">權限分配</h3>
+                                <p class="text-gray-500 mt-2 text-sm">設定不同角色的管理範圍與功能權限。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">社區與職位設定</h3>
+                                <p class="text-gray-500 mt-2 text-sm">新增與管理保全服務的社區及職位資料。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">GPS 打卡設定</h3>
+                                <p class="text-gray-500 mt-2 text-sm">設定各社區的 GPS 地理圍欄打卡範圍。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">考核規則設定</h3>
+                                <p class="text-gray-500 mt-2 text-sm">自訂獎懲項目、分數標準與考核週期。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">數據洞察</h3>
+                                <p class="text-gray-500 mt-2 text-sm">查看全公司的營運數據與分析報表。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">勤務排班總覽</h3>
+                                <p class="text-gray-500 mt-2 text-sm">查看所有社區的排班狀況與人力配置。</p>
+                            </div>
+                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                                <h3 class="font-semibold text-lg text-gray-700">系統公告</h3>
+                                <p class="text-gray-500 mt-2 text-sm">發布重要訊息給所有系統使用者。</p>
+                            </div>
                         </div>
                     </div>
                 </main>
             </div>
         </div>
     </div>
+    
+    <!-- Custom Message Box (自訂訊息框) -->
+    <div id="messageBoxContainer" class="message-box-container hidden">
+        <div class="message-box">
+            <p id="messageText" class="text-gray-700 mb-4"></p>
+            <button id="closeMessageBox" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">確定</button>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Get DOM elements (獲取DOM元素)
             const loginForm = document.getElementById('loginForm');
             const loginPage = document.getElementById('loginPage');
             const adminDashboard = document.getElementById('adminDashboard');
             const logoutButton = document.getElementById('logoutButton');
-            const errorMessage = document.getElementById('errorMessage');
             const togglePassword = document.getElementById('togglePassword');
-            const password = document.getElementById('password');
+            const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');
             const eyeOffIcon = document.getElementById('eyeOffIcon');
+            const userNameDisplay = document.getElementById('userName');
+            const welcomeUserDisplay = document.getElementById('welcomeUser');
+            
+            // Dashboard navigation elements (儀表板導覽元素)
+            const dashboardLink = document.getElementById('dashboardLink');
+            const settingsLink = document.getElementById('settingsLink');
+            const reportsLink = document.getElementById('reportsLink'); // Keep this link for now
+            const dashboardView = document.getElementById('dashboardView');
+            const settingsView = document.getElementById('settingsView');
+            const pageTitle = document.getElementById('pageTitle');
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.getElementById('menuButton');
 
 
-            // 預設管理員帳號
+            // Message box elements (訊息框元素)
+            const messageBoxContainer = document.getElementById('messageBoxContainer');
+            const messageText = document.getElementById('messageText');
+            const closeMessageBoxButton = document.getElementById('closeMessageBox');
+
+            // Hardcoded admin credentials for demo purposes (僅供示範，真實系統應使用安全後端)
             const ADMIN_EMAIL = 'admin@northwest.com';
             const ADMIN_PASS = 'password123';
 
-            // 登入邏輯
+            // Function to show custom message box (顯示自訂訊息框)
+            function showMessage(message) {
+                messageText.textContent = message;
+                messageBoxContainer.classList.remove('hidden');
+            }
+
+            // Function to hide custom message box (隱藏自訂訊息框)
+            function hideMessageBox() {
+                messageBoxContainer.classList.add('hidden');
+            }
+
+            // Function to update active nav link (更新導覽連結的活動狀態)
+            function updateActiveLink(activeId) {
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.remove('bg-red-600', 'text-white');
+                    link.classList.add('text-gray-600', 'hover:bg-gray-100');
+                });
+                const activeLink = document.getElementById(activeId);
+                activeLink.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                activeLink.classList.add('bg-red-600', 'text-white');
+            }
+
+            // Add event listener to close the message box (為訊息框的關閉按鈕添加事件監聽器)
+            closeMessageBoxButton.addEventListener('click', hideMessageBox);
+
+            // Login logic (登入邏輯)
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
-                const passwordInput = document.getElementById('password').value;
+                const password = passwordInput.value;
 
-                if (email === ADMIN_EMAIL && passwordInput === ADMIN_PASS) {
-                    // 登入成功
+                if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+                    // Login successful (登入成功)
                     console.log('系統管理員登入成功');
                     loginPage.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
-                    errorMessage.classList.add('hidden');
+                    userNameDisplay.textContent = email; // Show the logged-in user's email (顯示登入者的帳號)
+                    welcomeUserDisplay.textContent = email.split('@')[0]; // Set welcome message
+                    // Automatically navigate to dashboard on login
+                    showView('dashboard');
                 } else {
-                    // 登入失敗
-                    errorMessage.textContent = '帳號或密碼錯誤，請重新輸入。';
-                    errorMessage.classList.remove('hidden');
+                    // Login failed (登入失敗)
+                    showMessage('帳號或密碼錯誤，請重新輸入。');
                 }
             });
 
-            // 登出邏輯
+            // Logout logic (登出邏輯)
             logoutButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 console.log('系統管理員已登出');
                 adminDashboard.classList.add('hidden');
                 loginPage.classList.remove('hidden');
-                document.getElementById('password').value = ADMIN_PASS;
+                passwordInput.value = ADMIN_PASS; // Reset password field for convenience
             });
 
-            // 密碼可視化切換
-            togglePassword.addEventListener('click', function (e) {
-                // toggle the type attribute
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
-                // toggle the eye slash icon
+            // Password visibility toggle (密碼可視性切換)
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
                 eyeIcon.classList.toggle('hidden');
                 eyeOffIcon.classList.toggle('hidden');
             });
+
+            // View switching logic (視圖切換邏輯)
+            function showView(view) {
+                // Hide all views first
+                dashboardView.classList.add('hidden');
+                settingsView.classList.add('hidden');
+
+                // Show the requested view and update the title
+                if (view === 'dashboard') {
+                    dashboardView.classList.remove('hidden');
+                    pageTitle.textContent = '系統管理員儀表板';
+                    updateActiveLink('dashboardLink');
+                } else if (view === 'settings') {
+                    settingsView.classList.remove('hidden');
+                    pageTitle.textContent = '系統設定';
+                    updateActiveLink('settingsLink');
+                }
+                // Hide sidebar on view change for mobile devices
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('hidden');
+                }
+            }
+
+            dashboardLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('dashboard');
+            });
+            
+            settingsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showView('settings');
+            });
+
+            reportsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // For demonstration, this link will also show the settings view
+                showView('settings');
+            });
+
+            // Mobile menu button logic (行動版選單按鈕邏輯)
+            menuButton.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
         });
     </script>
 </body>
