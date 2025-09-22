@@ -54,7 +54,7 @@
         
     </style>
 </head>
-<body class="bg-red-700 flex items-center justify-center min-h-screen p-4">
+<body class="flex items-center justify-center min-h-screen p-4">
 
     <!-- Login Page (登入頁面) -->
     <div id="loginPage" class="w-full max-w-md">
@@ -107,48 +107,48 @@
     <div id="adminDashboard" class="hidden w-full h-screen">
         <div class="flex h-full">
             <!-- Sidebar (側邊欄) -->
-            <div id="sidebar" class="bg-gray-800 shadow-md flex-col hidden md:flex z-50 fixed md:static top-0 left-0 h-full overflow-y-auto no-scrollbar" style="width: 50%; min-width: 256px;">
-                <div class="p-6 text-center border-b border-gray-700">
+            <div id="sidebar" class="bg-gray-800 shadow-md flex-col hidden z-50 fixed md:static top-0 left-0 h-full overflow-y-auto no-scrollbar" style="background-color: #f3f4f6;">
+                <div class="p-6 text-center border-b border-gray-200">
                     <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-[80px] h-[40px] object-contain mx-auto mb-2">
-                    <h2 class="text-xl font-semibold text-white">西北保全</h2>
-                    <p class="text-sm text-gray-400">系統管理員</p>
+                    <h2 class="text-xl font-semibold text-gray-800">西北保全</h2>
+                    <p class="text-sm text-gray-500">系統管理員</p>
                 </div>
                 <nav class="flex-1 px-4 py-6 space-y-2">
-                    <a id="dashboardLink" href="#" class="flex items-center px-4 py-2 text-white bg-red-600 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <a id="dashboardLink" href="#" class="flex items-center px-4 py-2 text-gray-800 bg-red-600 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12v6h4v-6h-4z"></path></svg>
                         儀表板
                     </a>
-                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         勤務排班
                     </a>
-                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         獎懲登錄
                     </a>
-                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         任務指派
                     </a>
-                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         數據報表
                     </a>
-                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         帳號管理
                     </a>
-                    <a id="reportsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-3-5v5m-3-2v2m-3-7v7A2 2 0 005 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         社區管理
                     </a>
-                    <a id="settingsLink" href="#" class="flex items-center px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0 3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <a id="settingsLink" href="#" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg>
                         系統設定
                     </a>
                 </nav>
-                <div class="mt-auto p-4 border-t border-gray-700">
-                    <button id="logoutButton" class="w-full flex items-center justify-center px-4 py-2 text-gray-400 hover:bg-gray-700 hover:text-white rounded-lg">
+                <div class="p-4 border-t border-gray-200">
+                    <button id="logoutButton" class="w-full flex items-center justify-center px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         登出
                     </button>
@@ -156,7 +156,7 @@
             </div>
 
             <!-- Main Content (主要內容) -->
-            <div class="flex-1 flex flex-col overflow-hidden bg-gray-100">
+            <div class="flex-1 flex flex-col overflow-hidden">
                 <header class="bg-white shadow-sm p-4 flex justify-between items-center">
                     <button id="menuButton" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none focus:text-gray-900">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -167,10 +167,10 @@
                         <img class="w-10 h-10 rounded-full ml-3" src="https://placehold.co/40x40/7C3AED/FFFFFF?text=A" alt="Admin Avatar">
                     </div>
                 </header>
-                <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
+                <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 bg-white">
                     <!-- Dashboard View (儀表板視圖) -->
                     <div id="dashboardView">
-                        <div class="text-center p-10 bg-white rounded-xl shadow">
+                        <div class="text-center p-10 bg-gray-100 rounded-xl shadow">
                             <h2 class="text-2xl font-semibold text-gray-700">歡迎回到儀表板，<span id="welcomeUser">管理員</span>！</h2>
                             <p class="text-gray-500 mt-2">您可以從左側選單或上方的按鈕瀏覽不同的系統功能。</p>
                         </div>
@@ -180,35 +180,35 @@
                     <div id="settingsView" class="hidden">
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             <!-- 功能卡片 -->
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">帳號管理</h3>
                                 <p class="text-gray-500 mt-2 text-sm">建立、編輯、刪除各級別使用者帳號。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">權限分配</h3>
                                 <p class="text-gray-500 mt-2 text-sm">設定不同角色的管理範圍與功能權限。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">社區與職位設定</h3>
                                 <p class="text-gray-500 mt-2 text-sm">新增與管理保全服務的社區及職位資料。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">GPS 打卡設定</h3>
                                 <p class="text-gray-500 mt-2 text-sm">設定各社區的 GPS 地理圍欄打卡範圍。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">考核規則設定</h3>
                                 <p class="text-gray-500 mt-2 text-sm">自訂獎懲項目、分數標準與考核週期。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">數據洞察</h3>
                                 <p class="text-gray-500 mt-2 text-sm">查看全公司的營運數據與分析報表。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">勤務排班總覽</h3>
                                 <p class="text-gray-500 mt-2 text-sm">查看所有社區的排班狀況與人力配置。</p>
                             </div>
-                            <div class="dashboard-card bg-white p-6 rounded-xl shadow">
+                            <div class="dashboard-card bg-gray-100 p-6 rounded-xl shadow">
                                 <h3 class="font-semibold text-lg text-gray-700">系統公告</h3>
                                 <p class="text-gray-500 mt-2 text-sm">發布重要訊息給所有系統使用者。</p>
                             </div>
@@ -275,11 +275,11 @@
             // Function to update active nav link (更新導覽連結的活動狀態)
             function updateActiveLink(activeId) {
                 document.querySelectorAll('nav a').forEach(link => {
-                    link.classList.remove('bg-red-600', 'text-white');
-                    link.classList.add('text-gray-400', 'hover:bg-gray-700');
+                    link.classList.remove('bg-red-600', 'text-white', 'text-gray-800');
+                    link.classList.add('text-gray-600', 'hover:bg-gray-200');
                 });
                 const activeLink = document.getElementById(activeId);
-                activeLink.classList.remove('text-gray-400', 'hover:bg-gray-700');
+                activeLink.classList.remove('text-gray-600', 'hover:bg-gray-200');
                 activeLink.classList.add('bg-red-600', 'text-white');
             }
 
@@ -362,6 +362,19 @@
                 showView('settings');
             });
             
+            // Function to handle sidebar width (處理側邊欄寬度)
+            function handleSidebarWidth() {
+                const sidebar = document.getElementById('sidebar');
+                if (window.innerWidth < 400) {
+                    sidebar.style.width = '50%';
+                } else {
+                    sidebar.style.width = '15%';
+                }
+            }
+            
+            // Initial call and event listener for window resize (初次調用和視窗大小變動事件監聽器)
+            handleSidebarWidth();
+            window.addEventListener('resize', handleSidebarWidth);
 
             // Mobile menu button logic (行動版選單按鈕邏輯)
             menuButton.addEventListener('click', () => {
