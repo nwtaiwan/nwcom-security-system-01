@@ -335,20 +335,24 @@
             // Hardcoded data for demo (僅供示範，真實系統應使用後端)
             let regions = ['台北', '新北', '桃園'];
             let committeeTitles = ['主委', '副主委', '財委', '監委'];
-
+            
             // Hardcoded admin credentials for demo purposes (僅供示範，真實系統應使用安全後端)
             const ADMIN_EMAIL = 'admin@northwest.com';
             const ADMIN_PASS = 'password123';
 
             // Function to show custom message box (顯示自訂訊息框)
             function showMessage(message) {
-                messageText.textContent = message;
-                messageBoxContainer.classList.remove('hidden');
+                if (messageText && messageBoxContainer) {
+                    messageText.textContent = message;
+                    messageBoxContainer.classList.remove('hidden');
+                }
             }
 
             // Function to hide custom message box (隱藏自訂訊息框)
             function hideMessageBox() {
-                messageBoxContainer.classList.add('hidden');
+                if (messageBoxContainer) {
+                    messageBoxContainer.classList.add('hidden');
+                }
             }
 
             // Function to update active nav link (更新導覽連結的活動狀態)
@@ -421,94 +425,115 @@
             }
 
             // Add event listener to close the message box (為訊息框的關閉按鈕添加事件監聽器)
-            closeMessageBoxButton.addEventListener('click', hideMessageBox);
+            if (closeMessageBoxButton) {
+                closeMessageBoxButton.addEventListener('click', hideMessageBox);
+            }
 
             // Login logic (登入邏輯)
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = passwordInput.value;
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
+                    const password = passwordInput.value;
 
-                if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-                    // Login successful (登入成功)
-                    console.log('系統管理員登入成功');
-                    loginPage.classList.add('hidden');
-                    adminDashboard.classList.remove('hidden');
-                    document.body.classList.remove('bg-red-700', 'items-center', 'justify-center', 'min-h-screen', 'p-4');
-                    userNameDisplay.textContent = email; // Show the logged-in user's email (顯示登入者的帳號)
-                    welcomeUserDisplay.textContent = email.split('@')[0]; // Set welcome message
-                    // Automatically navigate to dashboard on login
-                    showView('dashboard');
-                } else {
-                    // Login failed (登入失敗)
-                    showMessage('帳號或密碼錯誤，請重新輸入。');
-                }
-            });
+                    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+                        // Login successful (登入成功)
+                        console.log('系統管理員登入成功');
+                        if (loginPage) loginPage.classList.add('hidden');
+                        if (adminDashboard) adminDashboard.classList.remove('hidden');
+                        document.body.classList.remove('bg-red-700', 'items-center', 'justify-center', 'min-h-screen', 'p-4');
+                        if (userNameDisplay) userNameDisplay.textContent = email; // Show the logged-in user's email (顯示登入者的帳號)
+                        if (welcomeUserDisplay) welcomeUserDisplay.textContent = email.split('@')[0]; // Set welcome message
+                        // Automatically navigate to dashboard on login
+                        showView('dashboard');
+                    } else {
+                        // Login failed (登入失敗)
+                        showMessage('帳號或密碼錯誤，請重新輸入。');
+                    }
+                });
+            }
 
             // Logout logic (登出邏輯)
-            logoutButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('系統管理員已登出');
-                adminDashboard.classList.add('hidden');
-                loginPage.classList.remove('hidden');
-                passwordInput.value = ADMIN_PASS; // Reset password field for convenience
-                document.body.classList.add('bg-red-700', 'items-center', 'justify-center', 'min-h-screen', 'p-4');
-            });
+            if (logoutButton) {
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('系統管理員已登出');
+                    if (adminDashboard) adminDashboard.classList.add('hidden');
+                    if (loginPage) loginPage.classList.remove('hidden');
+                    if (passwordInput) passwordInput.value = ADMIN_PASS; // Reset password field for convenience
+                    document.body.classList.add('bg-red-700', 'items-center', 'justify-center', 'min-h-screen', 'p-4');
+                });
+            }
 
             // Password visibility toggle (密碼可視性切換)
-            togglePassword.addEventListener('click', function () {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                eyeIcon.classList.toggle('hidden');
-                eyeOffIcon.classList.toggle('hidden');
-            });
+            if (togglePassword && passwordInput && eyeIcon && eyeOffIcon) {
+                togglePassword.addEventListener('click', function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    eyeIcon.classList.toggle('hidden');
+                    eyeOffIcon.classList.toggle('hidden');
+                });
+            }
 
             // View switching logic (視圖切換邏輯)
             function showView(view) {
                 // Hide all views first
-                dashboardView.classList.add('hidden');
-                communityView.classList.add('hidden');
-                settingsView.classList.add('hidden');
+                if (dashboardView) dashboardView.classList.add('hidden');
+                if (communityView) communityView.classList.add('hidden');
+                if (settingsView) settingsView.classList.add('hidden');
 
                 // Show the requested view and update the title
                 if (view === 'dashboard') {
-                    dashboardView.classList.remove('hidden');
-                    pageTitle.textContent = '儀表板';
+                    if (dashboardView) dashboardView.classList.remove('hidden');
+                    if (pageTitle) pageTitle.textContent = '儀表板';
                     updateActiveLink('dashboardLink');
                 } else if (view === 'community') {
-                    communityView.classList.remove('hidden');
-                    pageTitle.textContent = '社區管理';
+                    if (communityView) communityView.classList.remove('hidden');
+                    if (pageTitle) pageTitle.textContent = '社區管理';
                     updateActiveLink('communityLink');
-                    renderCommunityFormOptions();
+                    if (communityRegionSelect && committeeMembersContainer) {
+                        renderCommunityFormOptions();
+                        // Clear and add a new committee member field when navigating to community view
+                        committeeMembersContainer.innerHTML = '';
+                        addCommitteeMember();
+                    }
                 } else if (view === 'settings') {
-                    settingsView.classList.remove('hidden');
-                    pageTitle.textContent = '系統設定';
+                    if (settingsView) settingsView.classList.remove('hidden');
+                    if (pageTitle) pageTitle.textContent = '系統設定';
                     updateActiveLink('settingsLink');
-                    renderRegionList();
-                    renderTitleList();
-                    // Set default tab view
-                    regionsTab.click();
+                    if (regionsTab && regionsView && titlesTab && titlesView) {
+                        renderRegionList();
+                        renderTitleList();
+                        // Set default tab view
+                        regionsTab.click();
+                    }
                 }
                 // Hide sidebar on view change for mobile devices
                 if (window.innerWidth < 700) {
-                    sidebar.classList.add('hidden');
+                    if (sidebar) sidebar.classList.add('hidden');
                 }
             }
             
-            dashboardLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView('dashboard');
-            });
+            if (dashboardLink) {
+                dashboardLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showView('dashboard');
+                });
+            }
             
-            communityLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView('community');
-            });
+            if (communityLink) {
+                communityLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showView('community');
+                });
+            }
 
-            settingsLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView('settings');
-            });
+            if (settingsLink) {
+                settingsLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showView('settings');
+                });
+            }
 
             // Added click handlers for other navigation links
             const navLinks = document.querySelectorAll('nav a');
@@ -525,14 +550,16 @@
             // Function to handle sidebar width (處理側邊欄寬度)
             function handleSidebarWidth() {
                 const sidebar = document.getElementById('sidebar');
-                if (window.innerWidth < 700) {
-                    sidebar.style.width = '50%';
-                    sidebar.classList.add('hidden');
-                    menuButton.classList.remove('hidden');
-                } else {
-                    sidebar.style.width = '15%';
-                    sidebar.classList.remove('hidden');
-                    menuButton.classList.add('hidden');
+                if (sidebar) {
+                    if (window.innerWidth < 700) {
+                        sidebar.style.width = '50%';
+                        sidebar.classList.add('hidden');
+                        if (menuButton) menuButton.classList.remove('hidden');
+                    } else {
+                        sidebar.style.width = '15%';
+                        sidebar.classList.remove('hidden');
+                        if (menuButton) menuButton.classList.add('hidden');
+                    }
                 }
             }
             
@@ -541,103 +568,118 @@
             window.addEventListener('resize', handleSidebarWidth);
 
             // Mobile menu button logic (行動版選單按鈕邏輯)
-            menuButton.addEventListener('click', () => {
-                sidebar.classList.toggle('hidden');
-            });
+            if (menuButton) {
+                menuButton.addEventListener('click', () => {
+                    if (sidebar) sidebar.classList.toggle('hidden');
+                });
+            }
             
             // Close sidebar when clicking outside on mobile (在行動裝置上點擊側邊欄外部時關閉)
-            adminDashboard.addEventListener('click', (e) => {
-                if (window.innerWidth < 700 && !sidebar.contains(e.target) && !menuButton.contains(e.target)) {
-                    sidebar.classList.add('hidden');
-                }
-            });
-            
-            // Settings tab logic
-            regionsTab.addEventListener('click', () => {
-                regionsView.classList.remove('hidden');
-                titlesView.classList.add('hidden');
-                regionsTab.classList.add('border-red-500');
-                titlesTab.classList.remove('border-red-500');
-            });
-
-            titlesTab.addEventListener('click', () => {
-                titlesView.classList.remove('hidden');
-                regionsView.classList.add('hidden');
-                titlesTab.classList.add('border-red-500');
-                regionsTab.classList.remove('border-red-500');
-            });
-            
-            // Add/Remove Region logic
-            addRegionButton.addEventListener('click', () => {
-                const newRegion = newRegionInput.value.trim();
-                if (newRegion && !regions.includes(newRegion)) {
-                    regions.push(newRegion);
-                    renderRegionList();
-                    newRegionInput.value = '';
-                }
-            });
-
-            regionList.addEventListener('click', (e) => {
-                if (e.target.closest('.remove-btn')) {
-                    const nameToRemove = e.target.closest('.remove-btn').dataset.name;
-                    regions = regions.filter(region => region !== nameToRemove);
-                    renderRegionList();
-                }
-            });
-
-            // Add/Remove Title logic
-            addTitleButton.addEventListener('click', () => {
-                const newTitle = newTitleInput.value.trim();
-                if (newTitle && !committeeTitles.includes(newTitle)) {
-                    committeeTitles.push(newTitle);
-                    renderTitleList();
-                    newTitleInput.value = '';
-                }
-            });
-            
-            titleList.addEventListener('click', (e) => {
-                if (e.target.closest('.remove-btn')) {
-                    const nameToRemove = e.target.closest('.remove-btn').dataset.name;
-                    committeeTitles = committeeTitles.filter(title => title !== nameToRemove);
-                    renderTitleList();
-                }
-            });
-
-            // Add committee member form field logic
-            addMemberButton.addEventListener('click', addCommitteeMember);
-
-            // Handle community form submission
-            addCommunityForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(addCommunityForm);
-                const communityData = {};
-                for (let [key, value] of formData.entries()) {
-                    communityData[key] = value;
-                }
-                
-                // Collect committee member data
-                const members = [];
-                const memberContainers = committeeMembersContainer.querySelectorAll('.flex');
-                memberContainers.forEach(container => {
-                    const title = container.querySelector('[name="memberTitle"]').value;
-                    const name = container.querySelector('[name="memberName"]').value;
-                    const phone = container.querySelector('[name="memberPhone"]').value;
-                    if (name) {
-                        members.push({ title, name, phone });
+            if (adminDashboard && sidebar && menuButton) {
+                adminDashboard.addEventListener('click', (e) => {
+                    if (window.innerWidth < 700 && !sidebar.contains(e.target) && !menuButton.contains(e.target)) {
+                        sidebar.classList.add('hidden');
                     }
                 });
-                
-                communityData.committeeMembers = members;
-                
-                console.log('新社區資料:', communityData);
-                showMessage('新社區已成功儲存！');
-                addCommunityForm.reset();
-                committeeMembersContainer.innerHTML = ''; // Clear member fields
-            });
+            }
+            
+            // Settings tab logic
+            if (regionsTab) {
+                regionsTab.addEventListener('click', () => {
+                    if (regionsView) regionsView.classList.remove('hidden');
+                    if (titlesView) titlesView.classList.add('hidden');
+                    regionsTab.classList.add('border-red-500');
+                    if (titlesTab) titlesTab.classList.remove('border-red-500');
+                });
+            }
+            
+            if (titlesTab) {
+                titlesTab.addEventListener('click', () => {
+                    if (titlesView) titlesView.classList.remove('hidden');
+                    if (regionsView) regionsView.classList.add('hidden');
+                    titlesTab.classList.add('border-red-500');
+                    if (regionsTab) regionsTab.classList.remove('border-red-500');
+                });
+            }
+            
+            // Add/Remove Region logic
+            if (addRegionButton && newRegionInput && regionList) {
+                addRegionButton.addEventListener('click', () => {
+                    const newRegion = newRegionInput.value.trim();
+                    if (newRegion && !regions.includes(newRegion)) {
+                        regions.push(newRegion);
+                        renderRegionList();
+                        newRegionInput.value = '';
+                    }
+                });
+                regionList.addEventListener('click', (e) => {
+                    if (e.target.closest('.remove-btn')) {
+                        const nameToRemove = e.target.closest('.remove-btn').dataset.name;
+                        regions = regions.filter(region => region !== nameToRemove);
+                        renderRegionList();
+                    }
+                });
+            }
 
-            // Initial render of community form fields
-            renderCommunityFormOptions();
-            addCommitteeMember();
+            // Add/Remove Title logic
+            if (addTitleButton && newTitleInput && titleList) {
+                addTitleButton.addEventListener('click', () => {
+                    const newTitle = newTitleInput.value.trim();
+                    if (newTitle && !committeeTitles.includes(newTitle)) {
+                        committeeTitles.push(newTitle);
+                        renderTitleList();
+                        newTitleInput.value = '';
+                    }
+                });
+                titleList.addEventListener('click', (e) => {
+                    if (e.target.closest('.remove-btn')) {
+                        const nameToRemove = e.target.closest('.remove-btn').dataset.name;
+                        committeeTitles = committeeTitles.filter(title => title !== nameToRemove);
+                        renderTitleList();
+                    }
+                });
+            }
+
+            // Add committee member form field logic
+            if (addMemberButton) {
+                addMemberButton.addEventListener('click', addCommitteeMember);
+            }
+
+            // Handle community form submission
+            if (addCommunityForm && committeeMembersContainer) {
+                addCommunityForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(addCommunityForm);
+                    const communityData = {};
+                    for (let [key, value] of formData.entries()) {
+                        communityData[key] = value;
+                    }
+                    
+                    // Collect committee member data
+                    const members = [];
+                    const memberContainers = committeeMembersContainer.querySelectorAll('.flex');
+                    memberContainers.forEach(container => {
+                        const title = container.querySelector('[name="memberTitle"]').value;
+                        const name = container.querySelector('[name="memberName"]').value;
+                        const phone = container.querySelector('[name="memberPhone"]').value;
+                        if (name) {
+                            members.push({ title, name, phone });
+                        }
+                    });
+                    
+                    communityData.committeeMembers = members;
+                    
+                    console.log('新社區資料:', communityData);
+                    showMessage('新社區已成功儲存！');
+                    addCommunityForm.reset();
+                    committeeMembersContainer.innerHTML = ''; // Clear member fields
+                });
+            }
+            // Initial render of community form fields only if communityView exists
+            if (communityView) {
+              renderCommunityFormOptions();
+              addCommitteeMember();
+            }
         });
     </script>
 </body>
