@@ -9,6 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+        .sub-tab-button.active {
+            border-color: #dc2626; /* red-600 */
+            color: #dc2626; /* red-600 */
+            background-color: #fee2e2; /* red-100 */
+        }
     </style>
 </head>
 <body class="bg-red-600 text-gray-800 transition-colors duration-300 h-full">
@@ -24,7 +29,7 @@
                     <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="公司標誌" style="width: 100px; height: 50px;">
                 </div>
                 <h1 class="text-lg sm:text-xl font-bold text-center text-gray-900">西北保全勤務管理系統</h1>
-                <p class="text-gray-500 text-center">V0.0.2</p>
+                <p class="text-gray-500 text-center">V0.0.3</p>
                 <form id="login-form" class="mt-8">
                     <div class="mb-4">
                         <div class="flex justify-between items-center mb-1">
@@ -50,14 +55,14 @@
         </div>
 
 
-        <!-- User Management View -->
-        <div id="user-management-view" class="hidden flex h-full">
+        <!-- Main View after Login -->
+        <div id="main-view" class="hidden flex h-full">
             <!-- Left Sidebar -->
             <div id="left-sidebar" class="fixed top-0 left-0 h-full w-1/2 bg-gray-100 p-6 flex flex-col shadow-lg z-30 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:w-1/5 md:translate-x-0">
                 <div class="text-center mb-10">
                     <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="公司標誌" class="mx-auto mb-4" style="width: 80px; height: 40px;">
                     <h2 class="font-bold text-gray-600 text-lg whitespace-nowrap">西北保全勤務管理系統</h2>
-                    <p class="text-xs text-gray-600 mt-1">V0.0.2</p>
+                    <p class="text-xs text-gray-600 mt-1">V0.0.3</p>
                     <div class="mt-4 p-2 rounded-lg bg-gray-200">
                          <span id="user-display" class="text-sm text-gray-700 font-medium block"></span>
                     </div>
@@ -66,11 +71,17 @@
                 <hr class="border-t border-gray-300 mb-6">
                 
                 <nav class="flex flex-col space-y-2">
-                    <a href="#" class="bg-red-100 text-red-600 font-semibold p-3 rounded-lg flex items-center justify-center">
+                    <a href="#" id="nav-users-btn" class="font-semibold p-3 rounded-lg flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                         </svg>
                         <span>帳號管理</span>
+                    </a>
+                    <a href="#" id="nav-settings-btn" class="font-semibold p-3 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.532 1.532 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.532 1.532 0 01-.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                        </svg>
+                        <span>系統設定</span>
                     </a>
                 </nav>
 
@@ -88,31 +99,82 @@
                     <p class="font-bold">權限不足</p>
                     <p>您的帳號沒有管理權限。</p>
                 </div>
-                <div id="user-management-content">
-                    <header class="flex justify-between items-center mb-6 pb-4 border-b">
-                         <div class="flex items-center">
-                            <button id="menu-toggle-btn" class="md:hidden mr-4 p-2 text-gray-600 hover:text-gray-900">
-                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                            </button>
-                            <h1 class="text-xl font-bold text-gray-800">帳號管理</h1>
-                         </div>
-                         <button id="show-add-user-modal-btn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700">新增帳號</button>
-                    </header>
-                    
-                    <h3 class="text-lg font-semibold my-4">帳號列表</h3>
 
-                    <!-- Users List -->
-                    <div class="overflow-auto" style="max-height: calc(100vh - 220px);">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50 sticky top-0">
-                                <tr>
-                                    <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">帳號</th>
-                                    <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">角色</th>
-                                    <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody id="users-list" class="bg-white divide-y divide-gray-200"></tbody>
-                        </table>
+                <div id="content-wrapper">
+                    <!-- User Management Page -->
+                    <div id="user-management-page">
+                        <header class="flex justify-between items-center mb-6 pb-4 border-b">
+                             <div class="flex items-center">
+                                <button id="menu-toggle-btn-users" class="md:hidden mr-4 p-2 text-gray-600 hover:text-gray-900">
+                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                                </button>
+                                <h1 class="text-xl font-bold text-gray-800">帳號管理</h1>
+                             </div>
+                             <button id="show-add-user-modal-btn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700">新增帳號</button>
+                        </header>
+                        
+                        <h3 class="text-lg font-semibold my-4">帳號列表</h3>
+                        <div class="overflow-auto" style="max-height: calc(100vh - 220px);">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50 sticky top-0">
+                                    <tr>
+                                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">帳號</th>
+                                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">角色</th>
+                                        <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-list" class="bg-white divide-y divide-gray-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- System Settings Page -->
+                    <div id="system-settings-page" class="hidden">
+                         <header class="flex justify-between items-center mb-6 pb-4 border-b">
+                             <div class="flex items-center">
+                                <button id="menu-toggle-btn-settings" class="md:hidden mr-4 p-2 text-gray-600 hover:text-gray-900">
+                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                                </button>
+                                <h1 class="text-xl font-bold text-gray-800">系統設定</h1>
+                             </div>
+                        </header>
+                        <!-- Sub Tabs -->
+                        <div class="mb-6 border-b border-gray-200">
+                            <nav class="flex space-x-4" aria-label="Tabs">
+                                <button id="sub-tab-account-settings" class="sub-tab-button active shrink-0 px-4 py-2 text-sm font-medium text-gray-500 rounded-t-lg border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300">帳號設定</button>
+                            </nav>
+                        </div>
+                        
+                        <!-- Account Settings Content -->
+                        <div id="account-settings-content">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Roles -->
+                                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h4 class="font-semibold text-gray-700">角色</h4>
+                                        <button id="add-role-btn" class="bg-green-500 text-white px-2 py-1 text-xs rounded hover:bg-green-600">新增</button>
+                                    </div>
+                                    <ul id="roles-list" class="space-y-2 max-h-60 overflow-y-auto"></ul>
+                                </div>
+                                <!-- Job Titles -->
+                                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h4 class="font-semibold text-gray-700">職稱</h4>
+                                        <button id="add-job-title-btn" class="bg-green-500 text-white px-2 py-1 text-xs rounded hover:bg-green-600">新增</button>
+                                    </div>
+                                    <ul id="job-titles-list" class="space-y-2 max-h-60 overflow-y-auto"></ul>
+                                </div>
+                                <!-- Certifications -->
+                                <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h4 class="font-semibold text-gray-700">專業證照</h4>
+                                        <button id="add-certification-btn" class="bg-green-500 text-white px-2 py-1 text-xs rounded hover:bg-green-600">新增</button>
+                                    </div>
+                                    <ul id="certifications-list" class="space-y-2 max-h-60 overflow-y-auto"></ul>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -136,10 +198,10 @@
                     <div class="mb-4">
                         <label for="new-user-role" class="block text-sm font-medium text-gray-700">角色</label>
                         <select id="new-user-role" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
-                            <option value="staff">工作人員</option>
+                            <option value="staff">勤務人員</option>
                             <option value="junior_manager">初階主管</option>
                             <option value="senior_manager">高階主管</option>
-                            <option value="system_admin">系統管理者</option>
+                            <option value="system_admin">系統管理員</option>
                         </select>
                     </div>
                     <div class="items-center px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -176,7 +238,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, query, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, onSnapshot, deleteDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- Firebase Configuration ---
         const firebaseConfig = {
@@ -204,12 +266,21 @@
         let currentUser = { uid: null, name: null, role: null };
         let unsubscribeUsers = () => {};
         let unsubscribeSession = () => {};
+        let unsubscribeSystemSettings = () => {};
+        let systemSettings = { roles: [], jobTitles: [], certifications: [] };
+
+        const roleMap = {
+            'system_admin': '系統管理員',
+            'senior_manager': '高階主管',
+            'junior_manager': '初階主管',
+            'staff': '勤務人員'
+        };
 
         // --- Firestore Paths ---
         const usersCollectionPath = () => ["users"];
         const userDocPath = (userId) => ["users", userId];
+        const settingsDocPath = () => ["system_settings", "account_config"];
 
-        // This listener ensures that the rest of the code runs only after the HTML document is fully loaded.
         window.addEventListener('DOMContentLoaded', () => {
             initializeAppPrivate();
         });
@@ -217,8 +288,7 @@
         function initializeAppPrivate() {
             // --- DOM Elements ---
             const loginScreen = document.getElementById('login-screen');
-            const userManagementView = document.getElementById('user-management-view');
-            const appContainer = document.getElementById('app');
+            const mainView = document.getElementById('main-view');
             const userDisplay = document.getElementById('user-display');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
@@ -237,38 +307,66 @@
             const cancelAddUserBtn = document.getElementById('cancel-add-user-btn');
             const leftSidebar = document.getElementById('left-sidebar');
             const sidebarOverlay = document.getElementById('sidebar-overlay');
-            const menuToggleBtn = document.getElementById('menu-toggle-btn');
-
-
-            appContainer.style.display = 'block';
+            const menuToggleBtnUsers = document.getElementById('menu-toggle-btn-users');
+            const menuToggleBtnSettings = document.getElementById('menu-toggle-btn-settings');
+            const navUsersBtn = document.getElementById('nav-users-btn');
+            const navSettingsBtn = document.getElementById('nav-settings-btn');
+            const userManagementPage = document.getElementById('user-management-page');
+            const systemSettingsPage = document.getElementById('system-settings-page');
+            const contentWrapper = document.getElementById('content-wrapper');
+            const permissionDeniedMsg = document.getElementById('permission-denied-msg');
             
-            // Mobile sidebar toggle logic
-            menuToggleBtn.addEventListener('click', () => {
+            // --- Sidebar and Navigation Logic ---
+            function openSidebar() {
                 leftSidebar.classList.remove('-translate-x-full');
                 sidebarOverlay.classList.remove('hidden');
-            });
+            }
 
-            sidebarOverlay.addEventListener('click', () => {
+            function closeSidebar() {
                 leftSidebar.classList.add('-translate-x-full');
                 sidebarOverlay.classList.add('hidden');
-            });
+            }
+            
+            menuToggleBtnUsers.addEventListener('click', openSidebar);
+            menuToggleBtnSettings.addEventListener('click', openSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
 
+            function switchView(view) {
+                userManagementPage.classList.add('hidden');
+                systemSettingsPage.classList.add('hidden');
+                navUsersBtn.classList.remove('bg-red-100', 'text-red-600');
+                navUsersBtn.classList.add('text-gray-600', 'hover:bg-gray-200');
+                navSettingsBtn.classList.remove('bg-red-100', 'text-red-600');
+                navSettingsBtn.classList.add('text-gray-600', 'hover:bg-gray-200');
 
-            // --- UI Helpers (Modals and Loader) ---
+                if (view === 'users') {
+                    userManagementPage.classList.remove('hidden');
+                    navUsersBtn.classList.add('bg-red-100', 'text-red-600');
+                    navUsersBtn.classList.remove('text-gray-600', 'hover:bg-gray-200');
+                } else if (view === 'settings') {
+                    systemSettingsPage.classList.remove('hidden');
+                    navSettingsBtn.classList.add('bg-red-100', 'text-red-600');
+                    navSettingsBtn.classList.remove('text-gray-600', 'hover:bg-gray-200');
+                }
+
+                if (window.innerWidth < 768) {
+                     closeSidebar();
+                }
+            }
+
+            navUsersBtn.addEventListener('click', (e) => { e.preventDefault(); switchView('users'); });
+            navSettingsBtn.addEventListener('click', (e) => { e.preventDefault(); switchView('settings'); });
+
+            // --- UI Helpers ---
             function showLoader() { loader.classList.remove('hidden'); }
             function hideLoader() { loader.classList.add('hidden'); }
-
             function showCustomAlert(message, title = '通知') {
                 modalTitle.textContent = title;
                 modalMessage.textContent = message;
                 modalButtons.innerHTML = `<button id="modal-ok-btn" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-1/2 shadow-sm hover:bg-red-700 focus:outline-none">確定</button>`;
                 customModal.classList.remove('hidden');
-
-                document.getElementById('modal-ok-btn').onclick = () => {
-                    customModal.classList.add('hidden');
-                };
+                document.getElementById('modal-ok-btn').onclick = () => customModal.classList.add('hidden');
             }
-
             function showCustomConfirm(message, title = '請確認') {
                 modalTitle.textContent = title;
                 modalMessage.textContent = message;
@@ -277,16 +375,9 @@
                     <button id="modal-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-300 focus:outline-none">取消</button>
                 `;
                 customModal.classList.remove('hidden');
-
                 return new Promise((resolve) => {
-                    document.getElementById('modal-confirm-btn').onclick = () => {
-                        customModal.classList.add('hidden');
-                        resolve(true);
-                    };
-                    document.getElementById('modal-cancel-btn').onclick = () => {
-                        customModal.classList.add('hidden');
-                        resolve(false);
-                    };
+                    document.getElementById('modal-confirm-btn').onclick = () => { customModal.classList.add('hidden'); resolve(true); };
+                    document.getElementById('modal-cancel-btn').onclick = () => { customModal.classList.add('hidden'); resolve(false); };
                 });
             }
 
@@ -294,7 +385,6 @@
             function setupUI() {
                 const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
                 const eyeOffIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 .847 0 1.67.127 2.455.364m0 18.461A10.05 10.05 0 0012 19c2.485 0 4.786-.99 6.437-2.625M12 5a9.955 9.955 0 014.242 1.031" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9a3 3 0 110 6 3 3 0 010-6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l22 22" /></svg>`;
-                
                 togglePasswordBtn.innerHTML = eyeIcon;
                 togglePasswordBtn.addEventListener('click', () => {
                     if (passwordInput.type === 'password') {
@@ -305,7 +395,6 @@
                         togglePasswordBtn.innerHTML = eyeIcon;
                     }
                 });
-
                 const savedUsername = localStorage.getItem('qrSystemUsername');
                 if (savedUsername) {
                     usernameInput.value = savedUsername;
@@ -324,12 +413,9 @@
                 try {
                     const userCredential = await signInWithEmailAndPassword(auth, emailForFirebase, password);
                     const user = userCredential.user;
-                    
                     const sessionId = crypto.randomUUID();
                     localStorage.setItem('loginSessionId', sessionId);
-                    const userRef = doc(db, 'users', user.uid);
-                    await updateDoc(userRef, { loginSessionId: sessionId });
-
+                    await updateDoc(doc(db, 'users', user.uid), { loginSessionId: sessionId });
                     if (rememberMeCheckbox.checked) {
                         localStorage.setItem('qrSystemUsername', username);
                     } else {
@@ -340,16 +426,15 @@
                     if (username === 'test' && error.code === 'auth/user-not-found') {
                         try {
                            const userCredential = await createUserWithEmailAndPassword(auth, 'test@qrsystem.app', '123456');
-                           const userRef = doc(db, 'users', userCredential.user.uid);
-                           await setDoc(userRef, { username: 'test', email: userCredential.user.email, role: 'system_admin' });
+                           await setDoc(doc(db, 'users', userCredential.user.uid), { username: 'test', email: userCredential.user.email, role: 'system_admin' });
                            showCustomAlert('測試管理員帳號已建立，請重新登入。');
                         } catch (creationError) {
                             showCustomAlert(`測試帳號建立失敗: ${creationError.message}`);
                         }
                     } else if (error.code === 'auth/invalid-credential') {
-                            showCustomAlert(`登入失败: 帳號或密碼錯誤。`);
+                        showCustomAlert(`登入失败: 帳號或密碼錯誤。`);
                     } else {
-                            showCustomAlert(`登入失败: ${error.message}`);
+                        showCustomAlert(`登入失败: ${error.message}`);
                     }
                 } finally {
                     hideLoader();
@@ -358,63 +443,49 @@
 
             const handleLogout = async () => {
                 if (currentUser && currentUser.uid) {
-                    const userRef = doc(db, 'users', currentUser.uid);
                     try {
-                        await updateDoc(userRef, { loginSessionId: null });
-                    } catch (error) {
-                        console.error("Failed to clear session on logout:", error);
-                    }
+                        await updateDoc(doc(db, 'users', currentUser.uid), { loginSessionId: null });
+                    } catch (error) { console.error("Failed to clear session on logout:", error); }
                 }
                 localStorage.removeItem('loginSessionId');
                 signOut(auth);
             };
-
             logoutBtn.addEventListener('click', handleLogout);
             
             onAuthStateChanged(auth, async user => {
                 unsubscribeUsers();
                 unsubscribeSession();
+                unsubscribeSystemSettings();
 
                 if (user && user.email) {
                     const username = user.email.split('@')[0];
                     const userRef = doc(db, 'users', user.uid);
                     const userSnap = await getDoc(userRef);
-
-                    if (userSnap.exists()) {
-                        currentUser = { uid: user.uid, name: username, role: userSnap.data().role };
-                    } else {
-                        const role = username === 'test' ? 'system_admin' : 'staff'; 
-                        await setDoc(userRef, { username: username, email: user.email, role: role });
-                        currentUser = { uid: user.uid, name: username, role: role };
-                    }
+                    currentUser = userSnap.exists() ? { uid: user.uid, name: username, role: userSnap.data().role } : { uid: user.uid, name: username, role: 'staff' };
                     
                     const localSessionId = localStorage.getItem('loginSessionId');
-                    unsubscribeSession = onSnapshot(doc(db, 'users', user.uid), (userDoc) => {
-                        if (userDoc.exists()) {
-                            const remoteSessionId = userDoc.data().loginSessionId;
-                            if (localSessionId && remoteSessionId && localSessionId !== remoteSessionId) {
-                                unsubscribeSession(); 
-                                showCustomAlert('您的帳號已在另一台裝置登入，此裝置將自動登出。', '強制登出');
-                                handleLogout();
-                            }
+                    unsubscribeSession = onSnapshot(userRef, (userDoc) => {
+                        if (userDoc.exists() && localSessionId && userDoc.data().loginSessionId && localSessionId !== userDoc.data().loginSessionId) {
+                            unsubscribeSession(); 
+                            showCustomAlert('您的帳號已在另一台裝置登入，此裝置將自動登出。', '強制登出');
+                            handleLogout();
                         }
                     });
 
                     document.body.classList.remove('bg-red-600');
                     document.body.classList.add('bg-gray-50');
-                    userDisplay.textContent = `${currentUser.name} (${currentUser.role})`;
+                    userDisplay.textContent = `${currentUser.name} (${roleMap[currentUser.role] || currentUser.role})`;
+                    loginScreen.classList.add('hidden');
+                    mainView.classList.remove('hidden');
                     
-                    showUserManagementView();
-                    
-                    const userManagementContent = document.getElementById('user-management-content');
-                    const permissionDeniedMsg = document.getElementById('permission-denied-msg');
-
-                    if(currentUser.role === 'system_admin') {
-                       userManagementContent.style.display = 'block';
+                    if (currentUser.role === 'system_admin') {
+                       contentWrapper.style.display = 'block';
                        permissionDeniedMsg.style.display = 'none';
                        unsubscribeUsers = listenToUsers();
+                       unsubscribeSystemSettings = listenToSystemSettings();
+                       switchView('users');
                     } else {
-                       userManagementContent.style.display = 'none';
+                       contentWrapper.style.display = 'none';
                        permissionDeniedMsg.style.display = 'block';
                     }
                 } else {
@@ -422,83 +493,52 @@
                     document.body.classList.remove('bg-gray-50');
                     document.body.classList.add('bg-red-600');
                     loginScreen.classList.remove('hidden');
-                    userManagementView.classList.add('hidden');
+                    mainView.classList.add('hidden');
                 }
             });
-
-            // --- View Management ---
-            function showUserManagementView() {
-                loginScreen.classList.add('hidden');
-                userManagementView.classList.remove('hidden');
-            }
-
-            // --- User Management Logic ---
-            showAddUserModalBtn.addEventListener('click', () => {
-                addUserForm.reset();
-                addUserModal.classList.remove('hidden');
-            });
-
-            cancelAddUserBtn.addEventListener('click', () => {
-                addUserModal.classList.add('hidden');
-            });
             
+            // --- User Management Logic ---
+            showAddUserModalBtn.addEventListener('click', () => { addUserForm.reset(); addUserModal.classList.remove('hidden'); });
+            cancelAddUserBtn.addEventListener('click', () => { addUserModal.classList.add('hidden'); });
             addUserForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const newUsername = document.getElementById('new-username').value;
                 const newPassword = document.getElementById('new-password').value;
                 const newUserRole = document.getElementById('new-user-role').value;
 
-                if(!newUsername || !newPassword){
-                    showCustomAlert('請填寫帳號和密碼。');
-                    return;
-                }
-                if(newPassword.length < 6){
-                    showCustomAlert('密碼長度至少需要6個字元。');
-                    return;
-                }
+                if (!newUsername || !newPassword) return showCustomAlert('請填寫帳號和密碼。');
+                if (newPassword.length < 6) return showCustomAlert('密碼長度至少需要6個字元。');
+                
                 showLoader();
                 try {
-                    // We need a temporary auth instance to create the user without signing in the admin out
                     const tempApp = initializeApp(firebaseConfig, 'temp-app-for-user-creation');
                     const tempAuth = getAuth(tempApp);
-                    
                     const email = `${newUsername}@qrsystem.app`;
                     const userCredential = await createUserWithEmailAndPassword(tempAuth, email, newPassword);
-                    const userRef = doc(db, 'users', userCredential.user.uid);
-                    await setDoc(userRef, {
-                        username: newUsername,
-                        email: email,
-                        role: newUserRole
-                    });
+                    await setDoc(doc(db, 'users', userCredential.user.uid), { username: newUsername, email: email, role: newUserRole });
                     showCustomAlert(`帳號 ${newUsername} 建立成功！`);
                     addUserForm.reset();
                     addUserModal.classList.add('hidden');
                 } catch (error) {
                     console.error("Error creating user:", error);
-                    if(error.code === 'auth/email-already-in-use'){
-                        showCustomAlert('錯誤：此帳號名稱已被使用。');
-                    } else {
-                        showCustomAlert(`建立帳號時發生錯誤： ${error.message}`);
-                    }
+                    showCustomAlert(error.code === 'auth/email-already-in-use' ? '錯誤：此帳號名稱已被使用。' : `建立帳號時發生錯誤： ${error.message}`);
                 } finally {
                     hideLoader();
                 }
             });
 
             function listenToUsers() {
-                 const q = query(collection(db, ...usersCollectionPath()));
-                 return onSnapshot(q, (snapshot) => {
+                 return onSnapshot(query(collection(db, ...usersCollectionPath())), (snapshot) => {
                      const userListTbody = document.getElementById('users-list');
                      userListTbody.innerHTML = '';
                      snapshot.forEach(doc => {
+                         if (doc.id === currentUser.uid) return;
                          const userData = doc.data();
-                         // Do not display the currently logged-in admin in the list
-                         if(doc.id === currentUser.uid) return;
-                         
+                         const userRoleDisplay = roleMap[userData.role] || userData.role;
                          const tr = document.createElement('tr');
                          tr.innerHTML = `
                              <td class="px-2 py-2 whitespace-nowrap">${userData.username}</td>
-                             <td class="px-2 py-2 whitespace-nowrap">${userData.role}</td>
+                             <td class="px-2 py-2 whitespace-nowrap">${userRoleDisplay}</td>
                              <td class="px-2 py-2 whitespace-nowrap text-sm font-medium">
                                  <button data-id="${doc.id}" class="change-role-btn text-blue-600 hover:text-blue-900">變更角色</button>
                                  <button data-id="${doc.id}" data-username="${userData.username}" class="delete-user-btn text-red-600 hover:text-red-900 ml-2">刪除</button>
@@ -510,44 +550,125 @@
             }
 
             document.getElementById('users-list').addEventListener('click', async (e) => {
-                const target = e.target;
-                const userId = target.dataset.id;
+                const { classList, dataset } = e.target;
+                const { id, username } = dataset;
                 
-                if (target.classList.contains('delete-user-btn')) {
-                    const username = target.dataset.username;
+                if (classList.contains('delete-user-btn')) {
                     if (await showCustomConfirm(`您確定要刪除帳號 ${username} 嗎？此操作無法復原。`)) {
                         showLoader();
                         try {
-                           await deleteDoc(doc(db, ...userDocPath(userId)));
+                           await deleteDoc(doc(db, ...userDocPath(id)));
                            showCustomAlert('使用者資料已刪除。請注意：您可能需要手動從 Firebase Authentication 主控台刪除使用者以釋放 email。');
                         } catch(error) {
                             console.error("Error deleting user doc:", error);
                             showCustomAlert("刪除使用者資料失敗。");
-                        } finally {
-                            hideLoader();
-                        }
+                        } finally { hideLoader(); }
                     }
-                }
-
-                if (target.classList.contains('change-role-btn')) {
+                } else if (classList.contains('change-role-btn')) {
                     const newRole = prompt("請輸入新角色 (system_admin, senior_manager, junior_manager, staff):");
-                    const validRoles = ['system_admin', 'senior_manager', 'junior_manager', 'staff'];
-                    if (newRole && validRoles.includes(newRole)) {
+                    if (newRole && Object.keys(roleMap).includes(newRole)) {
                         showLoader();
                         try {
-                            const userRef = doc(db, ...userDocPath(userId));
-                            await updateDoc(userRef, { role: newRole });
+                            await updateDoc(doc(db, ...userDocPath(id)), { role: newRole });
                             showCustomAlert('角色已更新！');
                         } catch(error) {
                             console.error("Error updating role:", error);
                             showCustomAlert('更新角色失敗。');
-                        } finally {
-                            hideLoader();
-                        }
+                        } finally { hideLoader(); }
                     } else if (newRole) {
                         showCustomAlert('無效的角色名稱！');
                     }
                 }
+            });
+            
+            // --- System Settings Logic ---
+            const settingsConfig = {
+                roles: { listEl: document.getElementById('roles-list'), addBtn: document.getElementById('add-role-btn') },
+                jobTitles: { listEl: document.getElementById('job-titles-list'), addBtn: document.getElementById('add-job-title-btn') },
+                certifications: { listEl: document.getElementById('certifications-list'), addBtn: document.getElementById('add-certification-btn') }
+            };
+
+            function listenToSystemSettings() {
+                const settingsRef = doc(db, ...settingsDocPath());
+                return onSnapshot(settingsRef, async (docSnap) => {
+                    if (docSnap.exists()) {
+                        systemSettings = docSnap.data();
+                        renderAllSettingsLists();
+                    } else {
+                        // Doc doesn't exist, create it with defaults
+                        const defaultSettings = {
+                            roles: ['系統管理員', '高階主管', '初階主管', '勤務人員'],
+                            jobTitles: ['日班保全', '日機保全', '夜班保全', '夜機保全', '行政祕書', '財務秘書', '吧檯秘書', '總幹事', '副總幹事', '督導', '課長', '襄理', '經理', '處長', '協理', '特助'],
+                            certifications: ['急救證照', '職業安全衛生業務主管證照', '職業安全衛生管理員證照', '防火管理人證照']
+                        };
+                        await setDoc(settingsRef, defaultSettings);
+                        systemSettings = defaultSettings;
+                        renderAllSettingsLists();
+                    }
+                });
+            }
+
+            function renderAllSettingsLists() {
+                Object.keys(settingsConfig).forEach(category => {
+                    const { listEl } = settingsConfig[category];
+                    const items = systemSettings[category] || [];
+                    listEl.innerHTML = '';
+                    items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'flex justify-between items-center bg-white p-2 rounded shadow-xs';
+                        li.innerHTML = `
+                            <span class="text-sm">${item}</span>
+                            <div>
+                                <button data-category="${category}" data-value="${item}" class="edit-setting-btn text-blue-500 hover:text-blue-700 text-xs mr-2">修改</button>
+                                <button data-category="${category}" data-value="${item}" class="delete-setting-btn text-red-500 hover:text-red-700 text-xs">刪除</button>
+                            </div>
+                        `;
+                        listEl.appendChild(li);
+                    });
+                });
+            }
+
+            async function handleSettingUpdate(category, oldValue, newValue) {
+                const currentItems = [...systemSettings[category]];
+                const itemIndex = currentItems.indexOf(oldValue);
+                if (itemIndex > -1) {
+                    currentItems[itemIndex] = newValue;
+                    showLoader();
+                    try {
+                        await updateDoc(doc(db, ...settingsDocPath()), { [category]: currentItems });
+                    } catch(e) { showCustomAlert('更新失敗'); } finally { hideLoader(); }
+                }
+            }
+            
+            Object.entries(settingsConfig).forEach(([category, { addBtn, listEl }]) => {
+                addBtn.addEventListener('click', async () => {
+                    const newValue = prompt(`請輸入要新增的${addBtn.previousElementSibling.textContent}:`);
+                    if (newValue) {
+                        showLoader();
+                        try {
+                           await updateDoc(doc(db, ...settingsDocPath()), { [category]: arrayUnion(newValue) });
+                        } catch(e) { showCustomAlert('新增失敗'); } finally { hideLoader(); }
+                    }
+                });
+                
+                listEl.addEventListener('click', async (e) => {
+                    const { classList, dataset } = e.target;
+                    const { category, value } = dataset;
+
+                    if (classList.contains('delete-setting-btn')) {
+                        if (await showCustomConfirm(`確定要刪除 "${value}" 嗎?`)) {
+                            showLoader();
+                            try {
+                                await updateDoc(doc(db, ...settingsDocPath()), { [category]: arrayRemove(value) });
+                            } catch(e) { showCustomAlert('刪除失敗'); } finally { hideLoader(); }
+                        }
+                    } else if (classList.contains('edit-setting-btn')) {
+                        const newValue = prompt('修改內容:', value);
+                        if (newValue && newValue !== value) {
+                            handleSettingUpdate(category, value, newValue);
+                        }
+                    }
+                });
             });
         }
     </script>
