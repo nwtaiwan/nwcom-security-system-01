@@ -453,47 +453,54 @@
             logoutBtn.addEventListener('click', handleLogout);
             
             onAuthStateChanged(auth, async user => {
+                // Clear all previous listeners
                 unsubscribeUsers();
                 unsubscribeSession();
                 unsubscribeSystemSettings();
 
-                if (user && user.email) {
-                    const username = user.email.split('@')[0];
-                    const userRef = doc(db, 'users', user.uid);
-                    const userSnap = await getDoc(userRef);
-                    currentUser = userSnap.exists() ? { uid: user.uid, name: username, role: userSnap.data().role } : { uid: user.uid, name: username, role: 'staff' };
-                    
-                    const localSessionId = localStorage.getItem('loginSessionId');
-                    unsubscribeSession = onSnapshot(userRef, (userDoc) => {
-                        if (userDoc.exists() && localSessionId && userDoc.data().loginSessionId && localSessionId !== userDoc.data().loginSessionId) {
-                            unsubscribeSession(); 
-                            showCustomAlert('您的帳號已在另一台裝置登入，此裝置將自動登出。', '強制登出');
-                            handleLogout();
-                        }
-                    });
+                try {
+                    if (user && user.email) {
+                        const username = user.email.split('@')[0];
+                        const userRef = doc(db, 'users', user.uid);
+                        const userSnap = await getDoc(userRef);
+                        currentUser = userSnap.exists() ? { uid: user.uid, name: username, role: userSnap.data().role } : { uid: user.uid, name: username, role: 'staff' };
+                        
+                        const localSessionId = localStorage.getItem('loginSessionId');
+                        unsubscribeSession = onSnapshot(userRef, (userDoc) => {
+                            if (userDoc.exists() && localSessionId && userDoc.data().loginSessionId && localSessionId !== userDoc.data().loginSessionId) {
+                                unsubscribeSession(); 
+                                showCustomAlert('您的帳號已在另一台裝置登入，此裝置將自動登出。', '強制登出');
+                                handleLogout();
+                            }
+                        });
 
-                    document.body.classList.remove('bg-red-600');
-                    document.body.classList.add('bg-gray-50');
-                    userDisplay.textContent = `${currentUser.name} (${roleMap[currentUser.role] || currentUser.role})`;
-                    loginScreen.classList.add('hidden');
-                    mainView.classList.remove('hidden');
-                    
-                    if (currentUser.role === 'system_admin') {
-                       contentWrapper.style.display = 'block';
-                       permissionDeniedMsg.style.display = 'none';
-                       unsubscribeUsers = listenToUsers();
-                       unsubscribeSystemSettings = listenToSystemSettings();
-                       switchView('users');
+                        document.body.classList.remove('bg-red-600');
+                        document.body.classList.add('bg-gray-50');
+                        userDisplay.textContent = `${currentUser.name} (${roleMap[currentUser.role] || currentUser.role})`;
+                        loginScreen.classList.add('hidden');
+                        mainView.classList.remove('hidden');
+                        
+                        if (currentUser.role === 'system_admin') {
+                           contentWrapper.style.display = 'block';
+                           permissionDeniedMsg.style.display = 'none';
+                           unsubscribeUsers = listenToUsers();
+                           unsubscribeSystemSettings = listenToSystemSettings();
+                           switchView('users');
+                        } else {
+                           contentWrapper.style.display = 'none';
+                           permissionDeniedMsg.style.display = 'block';
+                        }
                     } else {
-                       contentWrapper.style.display = 'none';
-                       permissionDeniedMsg.style.display = 'block';
+                        currentUser = { uid: null, name: null, role: null };
+                        document.body.classList.remove('bg-gray-50');
+                        document.body.classList.add('bg-red-600');
+                        loginScreen.classList.remove('hidden');
+                        mainView.classList.add('hidden');
                     }
-                } else {
-                    currentUser = { uid: null, name: null, role: null };
-                    document.body.classList.remove('bg-gray-50');
-                    document.body.classList.add('bg-red-600');
-                    loginScreen.classList.remove('hidden');
-                    mainView.classList.add('hidden');
+                } catch (error) {
+                    console.error("Error during authentication state change:", error);
+                    showCustomAlert(`處理登入狀態時發生錯誤: ${error.message}`);
+                    handleLogout();
                 }
             });
             
@@ -528,25 +535,31 @@
             });
 
             function listenToUsers() {
-                 return onSnapshot(query(collection(db, ...usersCollectionPath())), (snapshot) => {
-                     const userListTbody = document.getElementById('users-list');
-                     userListTbody.innerHTML = '';
-                     snapshot.forEach(doc => {
-                         if (doc.id === currentUser.uid) return;
-                         const userData = doc.data();
-                         const userRoleDisplay = roleMap[userData.role] || userData.role;
-                         const tr = document.createElement('tr');
-                         tr.innerHTML = `
-                             <td class="px-2 py-2 whitespace-nowrap">${userData.username}</td>
-                             <td class="px-2 py-2 whitespace-nowrap">${userRoleDisplay}</td>
-                             <td class="px-2 py-2 whitespace-nowrap text-sm font-medium">
-                                 <button data-id="${doc.id}" class="change-role-btn text-blue-600 hover:text-blue-900">變更角色</button>
-                                 <button data-id="${doc.id}" data-username="${userData.username}" class="delete-user-btn text-red-600 hover:text-red-900 ml-2">刪除</button>
-                             </td>
-                         `;
-                         userListTbody.appendChild(tr);
-                     });
-                 });
+                 return onSnapshot(query(collection(db, ...usersCollectionPath())), 
+                    (snapshot) => {
+                        const userListTbody = document.getElementById('users-list');
+                        userListTbody.innerHTML = '';
+                        snapshot.forEach(doc => {
+                            if (doc.id === currentUser.uid) return;
+                            const userData = doc.data();
+                            const userRoleDisplay = roleMap[userData.role] || userData.role;
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td class="px-2 py-2 whitespace-nowrap">${userData.username}</td>
+                                <td class="px-2 py-2 whitespace-nowrap">${userRoleDisplay}</td>
+                                <td class="px-2 py-2 whitespace-nowrap text-sm font-medium">
+                                    <button data-id="${doc.id}" class="change-role-btn text-blue-600 hover:text-blue-900">變更角色</button>
+                                    <button data-id="${doc.id}" data-username="${userData.username}" class="delete-user-btn text-red-600 hover:text-red-900 ml-2">刪除</button>
+                                </td>
+                            `;
+                            userListTbody.appendChild(tr);
+                        });
+                    },
+                    (error) => {
+                        console.error("Firestore Permission Denied in listenToUsers:", error);
+                        showCustomAlert("權限不足，無法讀取使用者列表。請聯繫系統管理員檢查 Firestore 安全規則。");
+                    }
+                );
             }
 
             document.getElementById('users-list').addEventListener('click', async (e) => {
@@ -590,22 +603,28 @@
 
             function listenToSystemSettings() {
                 const settingsRef = doc(db, ...settingsDocPath());
-                return onSnapshot(settingsRef, async (docSnap) => {
-                    if (docSnap.exists()) {
-                        systemSettings = docSnap.data();
-                        renderAllSettingsLists();
-                    } else {
-                        // Doc doesn't exist, create it with defaults
-                        const defaultSettings = {
-                            roles: ['系統管理員', '高階主管', '初階主管', '勤務人員'],
-                            jobTitles: ['日班保全', '日機保全', '夜班保全', '夜機保全', '行政祕書', '財務秘書', '吧檯秘書', '總幹事', '副總幹事', '督導', '課長', '襄理', '經理', '處長', '協理', '特助'],
-                            certifications: ['急救證照', '職業安全衛生業務主管證照', '職業安全衛生管理員證照', '防火管理人證照']
-                        };
-                        await setDoc(settingsRef, defaultSettings);
-                        systemSettings = defaultSettings;
-                        renderAllSettingsLists();
+                return onSnapshot(settingsRef, 
+                    async (docSnap) => {
+                        if (docSnap.exists()) {
+                            systemSettings = docSnap.data();
+                            renderAllSettingsLists();
+                        } else {
+                            // Doc doesn't exist, create it with defaults
+                            const defaultSettings = {
+                                roles: ['系統管理員', '高階主管', '初階主管', '勤務人員'],
+                                jobTitles: ['日班保全', '日機保全', '夜班保全', '夜機保全', '行政祕書', '財務秘書', '吧檯秘書', '總幹事', '副總幹事', '督導', '課長', '襄理', '經理', '處長', '協理', '特助'],
+                                certifications: ['急救證照', '職業安全衛生業務主管證照', '職業安全衛生管理員證照', '防火管理人證照']
+                            };
+                            await setDoc(settingsRef, defaultSettings);
+                            systemSettings = defaultSettings;
+                            renderAllSettingsLists();
+                        }
+                    },
+                    (error) => {
+                         console.error("Firestore Permission Denied in listenToSystemSettings:", error);
+                         showCustomAlert("權限不足，無法讀取系統設定。請聯繫系統管理員檢查 Firestore 安全規則。");
                     }
-                });
+                );
             }
 
             function renderAllSettingsLists() {
