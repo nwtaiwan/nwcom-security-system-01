@@ -29,7 +29,7 @@
                     <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="公司標誌" style="width: 100px; height: 50px;">
                 </div>
                 <h1 class="text-lg sm:text-xl font-bold text-center text-gray-900">西北保全勤務管理系統</h1>
-                <p class="text-gray-500 text-center">V0.0.3</p>
+                <p class="text-gray-500 text-center">V0.0.4</p>
                 <form id="login-form" class="mt-8">
                     <div class="mb-4">
                         <div class="flex justify-between items-center mb-1">
@@ -62,7 +62,7 @@
                 <div class="text-center mb-10">
                     <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="公司標誌" class="mx-auto mb-4" style="width: 80px; height: 40px;">
                     <h2 class="font-bold text-gray-600 text-lg whitespace-nowrap">西北保全勤務管理系統</h2>
-                    <p class="text-xs text-gray-600 mt-1">V0.0.3</p>
+                    <p class="text-xs text-gray-600 mt-1">V0.0.4</p>
                     <div class="mt-4 p-2 rounded-lg bg-gray-200">
                          <span id="user-display" class="text-sm text-gray-700 font-medium block"></span>
                     </div>
@@ -440,15 +440,27 @@
                     hideLoader();
                 }
             });
-
-            const handleLogout = async () => {
-                if (currentUser && currentUser.uid) {
-                    try {
+            
+            const handleLogout = () => {
+                const process = async () => {
+                    if (currentUser && currentUser.uid) {
+                        // This is a "best effort" update. If it fails, we still want to log out.
                         await updateDoc(doc(db, 'users', currentUser.uid), { loginSessionId: null });
-                    } catch (error) { console.error("Failed to clear session on logout:", error); }
-                }
-                localStorage.removeItem('loginSessionId');
-                signOut(auth);
+                    }
+                    await signOut(auth); // This also returns a promise
+                };
+
+                showLoader();
+                process()
+                    .catch(error => {
+                        console.error("Error during logout process:", error);
+                        showCustomAlert('登出時發生錯誤，但仍會嘗試清除本機登入狀態。');
+                    })
+                    .finally(() => {
+                        localStorage.removeItem('loginSessionId');
+                        // onAuthStateChanged will handle the rest.
+                        hideLoader();
+                    });
             };
             logoutBtn.addEventListener('click', handleLogout);
             
