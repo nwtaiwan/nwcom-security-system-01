@@ -4,543 +4,504 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>西北保全勤務管理系統</title>
+    <link rel="icon" type="image/png" href="https://static.wixstatic.com/media/6148f9_4ebee1eb9c114124805fddcbbc8c6e28~mv2.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+    </style>
+</head>
+<body class="bg-red-600 text-gray-800 transition-colors duration-300">
+
+    <!-- App Container -->
+    <div id="app" class="max-w-7xl mx-auto p-4 md:p-6">
+
+        <!-- Login View -->
+        <div id="login-view" class="max-w-md mx-auto mt-20 bg-white p-8 rounded-xl shadow-lg">
+            <div class="flex justify-center mb-4">
+                <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="公司標誌" style="width: 100px; height: 50px;">
+            </div>
+            <h1 class="text-lg sm:text-xl font-bold text-center text-gray-900">西北保全勤務管理系統</h1>
+            <p class="text-gray-500 text-center">V0.0.1</p>
+            <form id="login-form" class="mt-8">
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-1">
+                         <label for="username" class="block text-sm font-medium text-gray-700">帳號</label>
+                         <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">記住我</label>
+                         </div>
+                    </div>
+                    <input type="text" id="username" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder="請輸入您的帳號">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">密碼</label>
+                    <div class="relative">
+                        <input type="password" id="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 pr-10" placeholder="********">
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"></button>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">登入</button>
+            </form>
+        </div>
+
+        <!-- User Management View -->
+        <div id="user-management-view" class="hidden">
+            <header class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b">
+                <h1 class="text-3xl font-bold text-gray-800">帳號管理</h1>
+                <div class="text-right">
+                    <h2 class="font-bold text-gray-800">西北社區QR Code報到系統V2</h2>
+                    <p class="text-xs text-gray-500">西北好用心  生活更安心</p>
+                    <div class="mt-1">
+                         <span id="user-display" class="text-sm text-gray-500"></span>
+                         <button id="logout-btn" class="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-gray-600 text-xs font-semibold ml-2">登出</button>
+                    </div>
+                </div>
+            </header>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div id="permission-denied-msg" class="hidden text-center text-red-500 p-4 rounded-lg bg-red-50 border border-red-200">
+                    <p class="font-bold">權限不足</p>
+                    <p>您的帳號沒有管理權限。</p>
+                </div>
+                <div id="user-management-content">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">帳號列表</h3>
+                        <button id="show-add-user-modal-btn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700">新增帳號</button>
+                    </div>
+                    <!-- Users List -->
+                    <div class="overflow-auto max-h-[60vh]">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50 sticky top-0">
+                                <tr>
+                                    <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">帳號</th>
+                                    <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">角色</th>
+                                    <th class="px-2 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-list" class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="add-user-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 text-center mb-4">新增帳號</h3>
+                <form id="add-user-form">
+                    <div class="mb-4">
+                        <label for="new-username" class="block text-sm font-medium text-gray-700">帳號</label>
+                        <input type="text" id="new-username" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-password" class="block text-sm font-medium text-gray-700">密碼</label>
+                        <input type="password" id="new-password" required class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-user-role" class="block text-sm font-medium text-gray-700">角色</label>
+                        <select id="new-user-role" class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                            <option value="staff">工作人員</option>
+                            <option value="junior_manager">初階主管</option>
+                            <option value="senior_manager">高階主管</option>
+                            <option value="system_admin">系統管理者</option>
+                        </select>
+                    </div>
+                    <div class="items-center px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                         <button type="submit" id="save-user-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">建立帳號</button>
+                         <button type="button" id="cancel-add-user-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal -->
+    <div id="custom-modal" class="fixed inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center">
+        <div class="relative mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 id="modal-title" class="text-lg leading-6 font-medium text-gray-900"></h3>
+                <div class="mt-2 px-7 py-3">
+                    <p id="modal-message" class="text-sm text-gray-500"></p>
+                </div>
+                <div id="modal-buttons" class="items-center px-4 py-3 space-x-4">
+                    <!-- Buttons will be injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-60 h-full w-full hidden z-50 flex items-center justify-center">
+        <div class="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-white"></div>
+    </div>
+
+
+    <!-- Firebase -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, setPersistence, browserSessionPersistence, browserLocalPersistence, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // --- START: Firebase Initialization and Authentication ---
-        
-        // SECURITY WARNING: Do not hardcode your API keys in production code.
-        // The __firebase_config variable is injected by the environment for security.
-        // The config below is for local development reference ONLY.
-        // 安全警告：請勿在正式環境的程式碼中寫死您的 API 金鑰。
-        // __firebase_config 變數會由執行環境安全地注入。
-        // 下方的設定僅供本機開發參考。
-        
-        
-        // Initialize Firebase
-        // 初始化 Firebase
-        const app = initializeApp(JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : JSON.stringify(firebaseConfig)));
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, onSnapshot, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- DOM Elements ---
-        const loginPage = document.getElementById('loginPage');
-        const adminDashboard = document.getElementById('adminDashboard');
-        const loginForm = document.getElementById('loginForm');
-        const logoutButton = document.getElementById('logoutButton');
-        const userNameDisplay = document.getElementById('userName');
-        const rememberMeCheckbox = document.getElementById('rememberMe');
-        const allLinks = document.querySelectorAll('#sidebar nav a');
-        const messageBoxContainer = document.getElementById('messageBoxContainer');
-        const messageBoxText = document.getElementById('messageBoxText');
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyARZNcyxLDUaC0xET4mfQw8sHLGzO8jNJE",
+          authDomain: "nwcom-security-system-01.firebaseapp.com",
+          projectId: "nwcom-security-system-01",
+          storageBucket: "nwcom-security-system-01.firebasestorage.app",
+          messagingSenderId: "757708581539",
+          appId: "1:757708581539:web:30a6b947e37a6b81f3ed16",
+          measurementId: "G-X2TSTPJHHG"
+        };
         
-        // --- Settings Page DOM Elements ---
-        const addRegionButton = document.getElementById('addRegionButton');
-        const newRegionInput = document.getElementById('newRegionInput');
-        const regionList = document.getElementById('regionList');
-
-        // --- App State ---
-        let regions = [];
-        let committeeTitles = [];
-        let employeeTitles = [];
-        let licenses = [];
-        
-        // --- Utility Functions ---
-        
-        // Function to show a message to the user
-        // 顯示訊息給使用者的函式
-        function showMessage(message, isError = false) {
-            if (messageBoxText) {
-                messageBoxText.textContent = message;
-                // You can add styling for errors if you want
-                // 您可以根據需要為錯誤添加樣式
-                // messageBoxText.className = isError ? 'text-red-500' : 'text-gray-800';
-            }
-            if (messageBoxContainer) {
-                messageBoxContainer.classList.remove('hidden');
-                setTimeout(() => {
-                    messageBoxContainer.classList.add('hidden');
-                }, 4000); // Increased timeout for important messages
-            }
+        // --- App Initialization ---
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (e) {
+            console.error("Firebase initialization failed.", e);
+            document.body.innerHTML = `<div class="p-8 text-center bg-red-100 text-red-800"><h1 class="font-bold text-2xl">Firebase 設定錯誤</h1><p class="mt-2">請在程式碼中填入您自己的 Firebase 設定後再試一次。</p></div>`;
         }
+        
+        // --- State ---
+        let currentUser = { uid: null, name: null, role: null };
+        let unsubscribeUsers = () => {};
+        let unsubscribeSession = () => {};
 
-        // --- Authentication Logic ---
+        // --- Firestore Paths ---
+        const usersCollectionPath = () => ["users"];
+        const userDocPath = (userId) => ["users", userId];
 
-        // Listen for authentication state changes
-        // 監聽身份驗證狀態的變化
-        onAuthStateChanged(auth, user => {
-            if (user && !user.isAnonymous) {
-                // User is signed in, fetch their role and setup the dashboard
-                // 用戶已登入，獲取其角色並設定儀表板
-                console.log("已登入使用者:", user.uid);
-                fetchUserRoleAndLogin(user);
-            } else {
-                // User is signed out or is an anonymous user
-                // 用戶已登出或是匿名用戶
-                console.log("使用者已登出或為匿名狀態");
-                showLoginPage();
-            }
+        // This listener ensures that the rest of the code runs only after the HTML document is fully loaded.
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeAppPrivate();
         });
 
-        // Handle initial authentication token
-        // 處理初始身份驗證令牌
-        (async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                    console.log("Custom token sign-in successful.");
-                } else if (!auth.currentUser) {
-                    await signInAnonymously(auth);
-                    console.log("Signed in anonymously.");
-                }
-            } catch (error) {
-                console.error("Initial authentication failed:", error);
-                showMessage("系統初始化失敗，請稍後再試。", true);
-            }
-        })();
+        function initializeAppPrivate() {
+            // --- DOM Elements ---
+            const loginView = document.getElementById('login-view');
+            const userManagementView = document.getElementById('user-management-view');
+            const appContainer = document.getElementById('app');
+            const userDisplay = document.getElementById('user-display');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const rememberMeCheckbox = document.getElementById('remember-me');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const loginForm = document.getElementById('login-form');
+            const addUserForm = document.getElementById('add-user-form');
+            const customModal = document.getElementById('custom-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const modalButtons = document.getElementById('modal-buttons');
+            const loader = document.getElementById('loader');
+            const logoutBtn = document.getElementById('logout-btn');
+            const addUserModal = document.getElementById('add-user-modal');
+            const showAddUserModalBtn = document.getElementById('show-add-user-modal-btn');
+            const cancelAddUserBtn = document.getElementById('cancel-add-user-btn');
 
-        // Login form submission handler
-        // 登入表單提交處理
-        if (loginForm) {
+
+            appContainer.style.display = 'block';
+
+            // --- UI Helpers (Modals and Loader) ---
+            function showLoader() { loader.classList.remove('hidden'); }
+            function hideLoader() { loader.classList.add('hidden'); }
+
+            function showCustomAlert(message, title = '通知') {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                modalButtons.innerHTML = `<button id="modal-ok-btn" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-1/2 shadow-sm hover:bg-red-700 focus:outline-none">確定</button>`;
+                customModal.classList.remove('hidden');
+
+                document.getElementById('modal-ok-btn').onclick = () => {
+                    customModal.classList.add('hidden');
+                };
+            }
+
+            function showCustomConfirm(message, title = '請確認') {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                modalButtons.innerHTML = `
+                    <button id="modal-confirm-btn" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-red-700 focus:outline-none">確定</button>
+                    <button id="modal-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-300 focus:outline-none">取消</button>
+                `;
+                customModal.classList.remove('hidden');
+
+                return new Promise((resolve) => {
+                    document.getElementById('modal-confirm-btn').onclick = () => {
+                        customModal.classList.add('hidden');
+                        resolve(true);
+                    };
+                    document.getElementById('modal-cancel-btn').onclick = () => {
+                        customModal.classList.add('hidden');
+                        resolve(false);
+                    };
+                });
+            }
+
+            // --- UI Logic ---
+            function setupUI() {
+                const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
+                const eyeOffIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 .847 0 1.67.127 2.455.364m0 18.461A10.05 10.05 0 0012 19c2.485 0 4.786-.99 6.437-2.625M12 5a9.955 9.955 0 014.242 1.031" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9a3 3 0 110 6 3 3 0 010-6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l22 22" /></svg>`;
+                
+                togglePasswordBtn.innerHTML = eyeIcon;
+                togglePasswordBtn.addEventListener('click', () => {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        togglePasswordBtn.innerHTML = eyeOffIcon;
+                    } else {
+                        passwordInput.type = 'password';
+                        togglePasswordBtn.innerHTML = eyeIcon;
+                    }
+                });
+
+                const savedUsername = localStorage.getItem('qrSystemUsername');
+                if (savedUsername) {
+                    usernameInput.value = savedUsername;
+                    rememberMeCheckbox.checked = true;
+                }
+            }
+            setupUI();
+
+            // --- Authentication & Role Management ---
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const rememberMe = rememberMeCheckbox.checked;
-
+                showLoader();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                const emailForFirebase = `${username}@qrsystem.app`;
                 try {
-                    // Set auth persistence based on "Remember Me"
-                    // 根據“記住我”設置身份驗證持久性
-                    const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
-                    await setPersistence(auth, persistence);
+                    const userCredential = await signInWithEmailAndPassword(auth, emailForFirebase, password);
+                    const user = userCredential.user;
                     
-                    console.log("正在嘗試使用以下方式登入:", email);
-                    await signInWithEmailAndPassword(auth, email, password);
-                    // onAuthStateChanged will handle the rest
-                    // onAuthStateChanged 將處理剩下的邏輯
-                } catch (error) {
-                    console.error("登入失敗:", error.code, error.message);
-                    // FIX: Provide a specific, actionable error message for the most common setup issue.
-                    // 修復：為最常見的設定問題提供具體、可操作的錯誤訊息。
-                    if (error.code === 'auth/operation-not-allowed') {
-                        showMessage('登入失敗：請先在 Firebase 後台啟用「電子郵件/密碼」登入方式。', true);
+                    const sessionId = crypto.randomUUID();
+                    localStorage.setItem('loginSessionId', sessionId);
+                    const userRef = doc(db, 'users', user.uid);
+                    await updateDoc(userRef, { loginSessionId: sessionId });
+
+                    if (rememberMeCheckbox.checked) {
+                        localStorage.setItem('qrSystemUsername', username);
                     } else {
-                        showMessage('帳號或密碼錯誤，請重新輸入。', true);
+                        localStorage.removeItem('qrSystemUsername');
+                    }
+                } catch (error) {
+                    console.error("Login failed", error);
+                    if (username === 'test' && error.code === 'auth/user-not-found') {
+                        try {
+                           const userCredential = await createUserWithEmailAndPassword(auth, 'test@qrsystem.app', '123456');
+                           const userRef = doc(db, 'users', userCredential.user.uid);
+                           await setDoc(userRef, { username: 'test', email: userCredential.user.email, role: 'system_admin' });
+                           showCustomAlert('測試管理員帳號已建立，請重新登入。');
+                        } catch (creationError) {
+                            showCustomAlert(`測試帳號建立失敗: ${creationError.message}`);
+                        }
+                    } else if (error.code === 'auth/invalid-credential') {
+                            showCustomAlert(`登入失敗: 帳號或密碼錯誤。`);
+                    } else {
+                            showCustomAlert(`登入失敗: ${error.message}`);
+                    }
+                } finally {
+                    hideLoader();
+                }
+            });
+
+            const handleLogout = async () => {
+                if (currentUser && currentUser.uid) {
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    try {
+                        await updateDoc(userRef, { loginSessionId: null });
+                    } catch (error) {
+                        console.error("Failed to clear session on logout:", error);
+                    }
+                }
+                localStorage.removeItem('loginSessionId');
+                signOut(auth);
+            };
+
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            onAuthStateChanged(auth, async user => {
+                unsubscribeUsers();
+                unsubscribeSession();
+
+                if (user && user.email) {
+                    const username = user.email.split('@')[0];
+                    const userRef = doc(db, 'users', user.uid);
+                    const userSnap = await getDoc(userRef);
+
+                    if (userSnap.exists()) {
+                        currentUser = { uid: user.uid, name: username, role: userSnap.data().role };
+                    } else {
+                        const role = username === 'test' ? 'system_admin' : 'staff'; 
+                        await setDoc(userRef, { username: username, email: user.email, role: role });
+                        currentUser = { uid: user.uid, name: username, role: role };
+                    }
+                    
+                    const localSessionId = localStorage.getItem('loginSessionId');
+                    unsubscribeSession = onSnapshot(doc(db, 'users', user.uid), (userDoc) => {
+                        if (userDoc.exists()) {
+                            const remoteSessionId = userDoc.data().loginSessionId;
+                            if (localSessionId && remoteSessionId && localSessionId !== remoteSessionId) {
+                                unsubscribeSession(); 
+                                showCustomAlert('您的帳號已在另一台裝置登入，此裝置將自動登出。', '強制登出');
+                                handleLogout();
+                            }
+                        }
+                    });
+
+                    document.body.classList.remove('bg-red-600');
+                    document.body.classList.add('bg-gray-50');
+                    userDisplay.textContent = `${currentUser.name} (${currentUser.role})`;
+                    
+                    showUserManagementView();
+                    
+                    const userManagementContent = document.getElementById('user-management-content');
+                    const permissionDeniedMsg = document.getElementById('permission-denied-msg');
+
+                    if(currentUser.role === 'system_admin') {
+                       userManagementContent.style.display = 'block';
+                       permissionDeniedMsg.style.display = 'none';
+                       unsubscribeUsers = listenToUsers();
+                    } else {
+                       userManagementContent.style.display = 'none';
+                       permissionDeniedMsg.style.display = 'block';
+                    }
+                } else {
+                    currentUser = { uid: null, name: null, role: null };
+                    document.body.classList.remove('bg-gray-50');
+                    document.body.classList.add('bg-red-600');
+                    loginView.classList.remove('hidden');
+                    userManagementView.classList.add('hidden');
+                }
+            });
+
+            // --- View Management ---
+            function showUserManagementView() {
+                loginView.classList.add('hidden');
+                userManagementView.classList.remove('hidden');
+            }
+
+            // --- User Management Logic ---
+            showAddUserModalBtn.addEventListener('click', () => {
+                addUserForm.reset();
+                addUserModal.classList.remove('hidden');
+            });
+
+            cancelAddUserBtn.addEventListener('click', () => {
+                addUserModal.classList.add('hidden');
+            });
+            
+            addUserForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newUsername = document.getElementById('new-username').value;
+                const newPassword = document.getElementById('new-password').value;
+                const newUserRole = document.getElementById('new-user-role').value;
+
+                if(!newUsername || !newPassword){
+                    showCustomAlert('請填寫帳號和密碼。');
+                    return;
+                }
+                if(newPassword.length < 6){
+                    showCustomAlert('密碼長度至少需要6個字元。');
+                    return;
+                }
+                showLoader();
+                try {
+                    // We need a temporary auth instance to create the user without signing in the admin out
+                    const tempApp = initializeApp(firebaseConfig, 'temp-app-for-user-creation');
+                    const tempAuth = getAuth(tempApp);
+                    
+                    const email = `${newUsername}@qrsystem.app`;
+                    const userCredential = await createUserWithEmailAndPassword(tempAuth, email, newPassword);
+                    const userRef = doc(db, 'users', userCredential.user.uid);
+                    await setDoc(userRef, {
+                        username: newUsername,
+                        email: email,
+                        role: newUserRole
+                    });
+                    showCustomAlert(`帳號 ${newUsername} 建立成功！`);
+                    addUserForm.reset();
+                    addUserModal.classList.add('hidden');
+                } catch (error) {
+                    console.error("Error creating user:", error);
+                    if(error.code === 'auth/email-already-in-use'){
+                        showCustomAlert('錯誤：此帳號名稱已被使用。');
+                    } else {
+                        showCustomAlert(`建立帳號時發生錯誤： ${error.message}`);
+                    }
+                } finally {
+                    hideLoader();
+                }
+            });
+
+            function listenToUsers() {
+                 const q = query(collection(db, ...usersCollectionPath()));
+                 return onSnapshot(q, (snapshot) => {
+                     const userListTbody = document.getElementById('users-list');
+                     userListTbody.innerHTML = '';
+                     snapshot.forEach(doc => {
+                         const userData = doc.data();
+                         // Do not display the currently logged-in admin in the list
+                         if(doc.id === currentUser.uid) return;
+                         
+                         const tr = document.createElement('tr');
+                         tr.innerHTML = `
+                             <td class="px-2 py-2 whitespace-nowrap">${userData.username}</td>
+                             <td class="px-2 py-2 whitespace-nowrap">${userData.role}</td>
+                             <td class="px-2 py-2 whitespace-nowrap text-sm font-medium">
+                                 <button data-id="${doc.id}" class="change-role-btn text-blue-600 hover:text-blue-900">變更角色</button>
+                                 <button data-id="${doc.id}" data-username="${userData.username}" class="delete-user-btn text-red-600 hover:text-red-900 ml-2">刪除</button>
+                             </td>
+                         `;
+                         userListTbody.appendChild(tr);
+                     });
+                 });
+            }
+
+            document.getElementById('users-list').addEventListener('click', async (e) => {
+                const target = e.target;
+                const userId = target.dataset.id;
+                
+                if (target.classList.contains('delete-user-btn')) {
+                    const username = target.dataset.username;
+                    if (await showCustomConfirm(`您確定要刪除帳號 ${username} 嗎？此操作無法復原。`)) {
+                        showLoader();
+                        try {
+                           await deleteDoc(doc(db, ...userDocPath(userId)));
+                           showCustomAlert('使用者資料已刪除。請注意：您可能需要手動從 Firebase Authentication 主控台刪除使用者以釋放 email。');
+                        } catch(error) {
+                            console.error("Error deleting user doc:", error);
+                            showCustomAlert("刪除使用者資料失敗。");
+                        } finally {
+                            hideLoader();
+                        }
+                    }
+                }
+
+                if (target.classList.contains('change-role-btn')) {
+                    const newRole = prompt("請輸入新角色 (system_admin, senior_manager, junior_manager, staff):");
+                    const validRoles = ['system_admin', 'senior_manager', 'junior_manager', 'staff'];
+                    if (newRole && validRoles.includes(newRole)) {
+                        showLoader();
+                        try {
+                            const userRef = doc(db, ...userDocPath(userId));
+                            await updateDoc(userRef, { role: newRole });
+                            showCustomAlert('角色已更新！');
+                        } catch(error) {
+                            console.error("Error updating role:", error);
+                            showCustomAlert('更新角色失敗。');
+                        } finally {
+                            hideLoader();
+                        }
+                    } else if (newRole) {
+                        showCustomAlert('無效的角色名稱！');
                     }
                 }
             });
         }
-
-        // Logout button click handler
-        // 登出按鈕點擊處理
-        if (logoutButton) {
-            logoutButton.addEventListener('click', () => {
-                signOut(auth).catch(error => {
-                    console.error("登出時發生錯誤:", error);
-                    showMessage("登出時發生錯誤，請稍後再試。", true);
-                });
-            });
-        }
-        
-        // Fetch user role from Firestore and proceed with login
-        // 從 Firestore 獲取用戶角色並繼續登入
-        async function fetchUserRoleAndLogin(user) {
-            try {
-                const userDocRef = doc(db, `artifacts/${appId}/users`, user.uid);
-                const userDocSnap = await getDoc(userDocRef);
-
-                if (userDocSnap.exists()) {
-                    const userData = userDocSnap.data();
-                    console.log("成功獲取使用者資料:", userData);
-                    setupDashboardForRole(userData);
-                    showDashboardPage();
-                } else {
-                    // This is a valid scenario if a user is created in Firebase Auth but their profile document hasn't been created in Firestore yet.
-                    // The user cannot proceed without a defined role.
-                    // 這種情況是正常的，例如當一個使用者在 Firebase Auth 中被建立，但其設定檔尚未在 Firestore 中建立時。
-                    // 沒有定義角色的使用者無法繼續操作。
-                    console.warn(`登入中止：使用者 (UID: ${user.uid}) 已通過驗證，但在 Firestore 中找不到其角色設定檔。如果此使用者應有權限，請在 'artifacts/${appId}/users/${user.uid}' 路徑下建立文件並設定 'role' 欄位。`);
-                    showMessage("您的帳號尚未啟用或權限設定不完整，請聯絡系統管理員。", true);
-                    signOut(auth); // Log out the user as they can't proceed
-                }
-            } catch (error) {
-                console.error("讀取 Firestore 使用者資料時發生嚴重錯誤:", error);
-                showMessage("讀取使用者資料時發生錯誤，請稍後再試。", true);
-                signOut(auth);
-            }
-        }
-
-        // --- UI Control and Role-Based Access Control (RBAC) ---
-        
-        // Show login page and hide dashboard
-        // 顯示登入頁面並隱藏儀表板
-        function showLoginPage() {
-            if (adminDashboard) adminDashboard.classList.add('hidden');
-            if (loginPage) loginPage.classList.remove('hidden');
-            document.body.className = 'bg-red-700 flex items-center justify-center min-h-screen p-4';
-        }
-
-        // Show dashboard and hide login page
-        // 顯示儀表板並隱藏登入頁面
-        function showDashboardPage() {
-            if (loginPage) loginPage.classList.add('hidden');
-            if (adminDashboard) adminDashboard.classList.remove('hidden');
-            document.body.className = '';
-            // Navigate to the dashboard view by default
-            // 預設導航到儀表板視圖
-            // showView('dashboard'); // Assuming showView function exists
-        }
-        
-        // Setup dashboard UI based on user role
-        // 根據使用者角色設定儀表板界面
-        function setupDashboardForRole(userData) {
-            if (userNameDisplay) {
-                userNameDisplay.textContent = userData.name || userData.email;
-            }
-            const userRole = userData.role;
-            console.log(`正在為角色設定儀表板: ${userRole}`);
-
-            // A map defining which roles can see which links
-            // 定義哪些角色可以看到哪些連結的地圖
-            const permissions = {
-                dashboardLink: ['admin', 'manager', 'junior_manager', 'employee'],
-                accountLink: ['admin', 'manager'],
-                communityLink: ['admin', 'manager', 'junior_manager'],
-                scheduleLink: ['admin', 'manager', 'junior_manager'],
-                rewardsLink: ['admin', 'manager', 'junior_manager'],
-                tasksLink: ['admin', 'manager', 'junior_manager'],
-                reportsLink: ['admin', 'manager'],
-                settingsLink: ['admin']
-            };
-
-            // Loop through all links and check permissions
-            // 遍歷所有連結並檢查權限
-            allLinks.forEach(link => {
-                const linkId = link.id;
-                if (permissions[linkId] && permissions[linkId].includes(userRole)) {
-                    link.style.display = 'flex'; // Show link
-                } else {
-                    link.style.display = 'none'; // Hide link
-                }
-            });
-        }
-        
-        // --- Firestore Data Management for Settings ---
-        
-        const settingsDocRef = doc(db, `artifacts/${appId}/public/data/settings/company`);
-        
-        // Load settings data from Firestore
-        // 從 Firestore 加載設定數據
-        async function loadSettings() {
-            try {
-                const docSnap = await getDoc(settingsDocRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    console.log("從 Firestore 加載的設定:", data);
-                    // Update local arrays with data from Firestore
-                    // 使用來自 Firestore 的數據更新本地數組
-                    regions = data.regions || [];
-                    committeeTitles = data.committeeTitles || [];
-                    employeeTitles = data.employeeTitles || [];
-                    licenses = data.licenses || [];
-                } else {
-                    console.log("在 Firestore 中找不到設定文件，將使用預設值。");
-                    // If no settings exist, maybe save the default ones?
-                    // 如果不存在設定，也許可以保存預設值？
-                    saveSettings();
-                }
-            } catch (error) {
-                console.error("加載設定時出錯:", error);
-                showMessage("無法加載系統設定。", true);
-            } finally {
-                // Render lists regardless of success or failure (shows defaults on fail)
-                // 無論成功或失敗都渲染列表（失敗時顯示預設值）
-                renderAllLists();
-            }
-        }
-
-        // Save (or update) settings data to Firestore
-        // 將設定數據保存（或更新）到 Firestore
-        async function saveSettings() {
-            try {
-                await setDoc(settingsDocRef, {
-                    regions: regions,
-                    committeeTitles: committeeTitles,
-                    employeeTitles: employeeTitles,
-                    licenses: licenses
-                });
-                console.log("設定已成功保存到 Firestore。");
-                showMessage("設定已儲存！");
-            } catch (error) {
-                console.error("保存設定時出錯:", error);
-                showMessage("儲存設定失敗。", true);
-            }
-        }
-        
-        // --- Settings Rendering Functions ---
-        function renderRegionList() {
-            if (!regionList) return;
-            regionList.innerHTML = regions.map(r => `
-                <li class="flex justify-between items-center p-2 bg-gray-50 rounded">
-                    <span>${r}</span>
-                    <button class="remove-btn text-red-500 hover:text-red-700" data-name="${r}" data-type="region">&times;</button>
-                </li>
-            `).join('');
-        }
-        
-        function renderAllLists() {
-            renderRegionList();
-            // Call other render functions here when they are created
-            // ... renderEmployeeTitleList();
-        }
-
-        // Add new item logic now calls saveSettings
-        // 新增項目的邏輯現在會調用 saveSettings
-        if (addRegionButton) {
-            addRegionButton.addEventListener('click', () => {
-                const newRegion = newRegionInput.value.trim();
-                if (newRegion && !regions.includes(newRegion)) {
-                    regions.push(newRegion);
-                    renderRegionList();
-                    saveSettings(); // Save to Firestore
-                    newRegionInput.value = '';
-                }
-            });
-        }
-        // ... (similar updates for addEmployeeTitleButton, addLicenseButton, addCommitteeTitleButton)
-
-        // Remove item logic now calls saveSettings
-        // 刪除項目的邏輯現在會調用 saveSettings
-        document.body.addEventListener('click', (e) => {
-            if (e.target.closest('.remove-btn')) {
-                const btn = e.target.closest('.remove-btn');
-                const nameToRemove = btn.dataset.name;
-                const type = btn.dataset.type;
-                let changed = false;
-                if (type === 'region') {
-                    regions = regions.filter(r => r !== nameToRemove);
-                    renderRegionList();
-                    changed = true;
-                } 
-                // ... (other types)
-                
-                if (changed) {
-                    saveSettings(); // Save to Firestore
-                }
-            }
-        });
-
-        // Initial call to load settings when the app starts
-        // 應用程式啟動時初始調用以加載設定
-        loadSettings();
-
-        // Password visibility toggle
-        const togglePassword = document.getElementById('togglePassword');
-        if (togglePassword) {
-            togglePassword.addEventListener('click', function (e) {
-                const password = document.getElementById('password');
-                const eyeIcon = document.getElementById('eyeIcon');
-                const eyeOffIcon = document.getElementById('eyeOffIcon');
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
-                eyeIcon.classList.toggle('hidden');
-                eyeOffIcon.classList.toggle('hidden');
-            });
-        }
-        
     </script>
-    
-    <style>
-        /* ... (existing styles) ... */
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-        }
-        .dashboard-card {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        #togglePassword {
-            cursor: pointer;
-        }
-        .message-box-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .message-box {
-            background: white;
-            color: #333;
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            font-size: 1rem;
-        }
-        .modal-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-        .modal-box {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 90%;
-            text-align: center;
-            position: relative;
-            max-height: 90%;
-            overflow-y: auto;
-            width: 600px;
-        }
-        .modal-box .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #ef4444;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-</head>
-<body class="bg-red-700 flex items-center justify-center min-h-screen p-4">
-
-    <!-- Login Page (登入頁面) -->
-    <div id="loginPage" class="w-full max-w-md">
-        <div class="bg-white shadow-lg rounded-xl px-8 pt-6 pb-8 mb-4">
-            <div class="text-center mb-8">
-                <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-[100px] h-[50px] object-contain mx-auto mb-4">
-                <h1 class="text-2xl font-bold text-gray-700">西北保全勤務管理系統</h1>
-                <p class="text-gray-500">V1.1.3</p>
-            </div>
-            <form id="loginForm">
-                <div class="mb-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="block text-gray-700 text-sm font-bold" for="email">
-                            帳號 (Email)
-                        </label>
-                        <div class="flex items-center">
-                            <input id="rememberMe" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
-                            <label for="rememberMe" class="ml-2 block text-sm text-gray-700">
-                                記住我
-                            </label>
-                        </div>
-                    </div>
-                    <input class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500" id="email" type="email" placeholder="請輸入您的登入信箱">
-                </div>
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-                        密碼
-                    </label>
-                    <div class="relative">
-                        <input class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 pr-10 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500" id="password" type="password" placeholder="******************">
-                        <div id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                            <svg id="eyeIcon" class="h-6 w-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            <svg id="eyeOffIcon" class="h-6 w-6 text-gray-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .126 2.454 .364m-6.082 11.45a1 1 0 01-1.414-1.414l11.03-11.03a1 1 0 011.414 1.414l-11.03 11.03zM15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between mt-4">
-                    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg w-full focus:outline-none focus:shadow-outline" type="submit">
-                        登入
-                    </button>
-                </div>
-            </form>
-        </div>
-        <p class="text-center text-gray-200 text-xs">
-            &copy;2025 西北保全股份有限公司. All rights reserved.
-        </p>
-    </div>
-
-    <!-- Admin Dashboard (管理員儀表板) -->
-    <div id="adminDashboard" class="hidden w-full h-screen">
-        <!-- This is a placeholder for the full dashboard HTML -->
-        <!-- 這裡是儀表板完整HTML的佔位符 -->
-        <div class="flex h-full bg-gray-100">
-            <!-- Sidebar (側邊欄) -->
-            <div id="sidebar" class="w-64 bg-white shadow-md flex flex-col">
-                <div class="p-6 text-center border-b">
-                    <img src="https://static.wixstatic.com/media/6148f9_56377cef73c1498f95a2c3057b89f2ed~mv2.png" alt="系統Logo" class="w-24 mx-auto mb-2">
-                    <h2 class="text-xl font-semibold">管理系統</h2>
-                    <p id="userRoleDisplay" class="text-sm text-gray-500">系統管理員</p>
-                </div>
-                <nav class="flex-1 px-4 py-6 space-y-2">
-                    <a href="#" id="dashboardLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">儀表板</a>
-                    <a href="#" id="accountLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">帳號管理</a>
-                    <a href="#" id="communityLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">社區管理</a>
-                    <a href="#" id="scheduleLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">勤務排班</a>
-                    <a href="#" id="rewardsLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">獎懲事件</a>
-                    <a href="#" id="tasksLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">任務指派</a>
-                    <a href="#" id="reportsLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">報告與分析</a>
-                    <a href="#" id="settingsLink" class="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">系統設定</a>
-                </nav>
-                <div class="mt-auto p-4 border-t">
-                    <button id="logoutButton" class="w-full flex items-center justify-center px-4 py-2 text-gray-600 hover:bg-red-100 hover:text-red-600 rounded-lg">
-                       登出
-                    </button>
-                </div>
-            </div>
-
-            <!-- Main Content (主要內容) -->
-            <div class="flex-1 flex flex-col overflow-hidden">
-                <header class="bg-white shadow-sm p-4 flex justify-between items-center">
-                    <h1 id="viewTitle" class="text-2xl font-semibold text-gray-800">儀表板</h1>
-                     <div class="flex items-center">
-                        <span id="userName" class="text-gray-600">Admin</span>
-                        <img class="w-10 h-10 rounded-full ml-3" src="https://placehold.co/40x40/7C3AED/FFFFFF?text=A" alt="Admin Avatar">
-                    </div>
-                </header>
-                <main id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-                    <!-- Content for different views will be injected here -->
-                    <!-- 不同視圖的內容將在此處注入 -->
-                </main>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Message Box (訊息框) -->
-    <div id="messageBoxContainer" class="message-box-container hidden">
-        <div id="messageBox" class="message-box">
-            <p id="messageBoxText"></p>
-        </div>
-    </div>
-
-    <!-- Modals (彈出視窗) -->
-    <div id="addCommunityModal" class="modal-container hidden">
-        <!-- ... existing community modal code ... -->
-    </div>
-    <div id="addEmployeeModal" class="modal-container hidden">
-        <!-- ... existing employee modal code ... -->
-    </div>
-
 </body>
 </html>
-
